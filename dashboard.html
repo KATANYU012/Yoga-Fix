@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SmartYoga AI</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>SmartYoga AI</h2>
+                <span>Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/frontend-admin/dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="/frontend-admin/media.html">Media Management</a></li>
+                    <li><a href="/frontend-admin/news-management.html">News Management</a></li>
+                    <li><a href="../frontend-user/login/login.html" id="logout-btn">Logout</a>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Dashboard</h1>
+            </header>
+
+            <section class="stats-cards">
+                <div class="card">
+                    <h3>Total Users</h3>
+                    <p class="stat-number" id="total-users-stat">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Media</h3>
+                    <p class="stat-number" id="total-media-stat">0</p>
+                </div>
+            </section>
+
+            <section class="data-table-container">
+                <h2>User Accounts Management</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        </tbody>
+                </table>
+            </section>
+
+            <section class="data-table-container" style="margin-top: 30px;">
+                <h2>Pose Accuracy Statistics</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pose Name</th>
+                            <th>Total Attempts</th>
+                            <th>Correct Attempts</th>
+                            <th>Accuracy (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pose-stats-table-body">
+                        </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userTableBody = document.getElementById('user-table-body');
+            const poseStatsTableBody = document.getElementById('pose-stats-table-body');
+
+            // --- 1. ตรวจสอบ Session และโหลดข้อมูล ---
+            fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.isLoggedIn || data.user.role !== 'admin') {
+                        alert('Access Denied.');
+                        window.location.href = '/frontend-user/login.html';
+                    } else {
+                        document.querySelector('.main-header h1').textContent = `Dashboard - Welcome, ${data.user.username}`;
+                        loadUsers();
+                        loadMedia();
+                        loadPoseStats();
+                    }
+                })
+                .catch(error => {
+                    console.error('Session check failed:', error);
+                    alert('Could not verify session. Please log in again.');
+                    window.location.href = '/frontend-user/login.html';
+                });
+
+            // --- 2. ฟังก์ชันสำหรับโหลดข้อมูล Users ---
+            function loadUsers() {
+                fetch('/smartyoga-api/get_all_users.php', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(users => {
+                        document.getElementById('total-users-stat').textContent = users.length;
+                        userTableBody.innerHTML = '';
+                        users.forEach(user => {
+                            const row = document.createElement('tr');
+                            const statusText = user.is_blocked == 1 ? 'Blocked' : 'Active';
+                            const buttonText = user.is_blocked == 1 ? 'Unblock' : 'Block';
+                            const statusClass = user.is_blocked == 1 ? 'status-blocked' : 'status-active';
+
+                            row.innerHTML = `
+                                <td>${user.id}</td>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                                <td>
+                                    <button class="action-btn block-btn" data-userid="${user.id}">${buttonText}</button>
+                                    <button class="action-btn edit-btn" data-userid="${user.id}">Edit</button>
+                                    <button class="action-btn delete-user-btn" data-userid="${user.id}">Delete</button>
+                                </td>
+                            `;
+                            userTableBody.appendChild(row);
+                        });
+                    });
+            }
+
+            // --- 3. ฟังก์ชันสำหรับโหลดข้อมูล Media (เพื่อแสดงใน Stat Card) ---
+            function loadMedia() {
+                fetch('/smartyoga-api/get_media.php', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(mediaItems => {
+                        document.getElementById('total-media-stat').textContent = mediaItems.length;
+                    });
+            }
+
+            // --- 4. ฟังก์ชันสำหรับโหลดข้อมูลสถิติ ---
+            function loadPoseStats() {
+                fetch('/smartyoga-api/get_pose_stats.php', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(stats => {
+                        poseStatsTableBody.innerHTML = '';
+                        stats.forEach(stat => {
+                            const row = document.createElement('tr');
+                            const accuracy = stat.total_attempts > 0 ? (stat.correct_attempts / stat.total_attempts) * 100 : 0;
+                            row.innerHTML = `
+                                <td>${stat.pose_name}</td>
+                                <td>${stat.total_attempts}</td>
+                                <td>${stat.correct_attempts}</td>
+                                <td>${accuracy.toFixed(2)} %</td>
+                            `;
+                            poseStatsTableBody.appendChild(row);
+                        });
+                    });
+            }
+            
+            // --- 5. Event Listener สำหรับจัดการปุ่มในตาราง User (เหลืออันเดียวที่ถูกต้อง) ---
+            userTableBody.addEventListener('click', function(e) {
+                const userId = e.target.getAttribute('data-userid');
+                if (!userId) return; 
+
+                if (e.target.classList.contains('block-btn')) {
+                    if (confirm(`Are you sure you want to toggle block for user ID: ${userId}?`)) {
+                        toggleBlock(userId);
+                    }
+                } else if (e.target.classList.contains('delete-user-btn')) {
+                    if (confirm(`Are you sure you want to permanently delete user ID: ${userId}?`)) {
+                        deleteUser(userId);
+                    }
+                } else if (e.target.classList.contains('edit-btn')) {
+                    window.location.href = `/frontend-admin/user-edit.html?id=${userId}`;
+                }
+            });
+
+            // --- 6. ฟังก์ชันสำหรับ Block/Unblock, Delete User (ย้าย fetch มาไว้ในฟังก์ชัน) ---
+            function toggleBlock(userId) {
+                fetch('/smartyoga-api/toggle_block_user.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId }),
+                    credentials: 'include'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    loadUsers(); // โหลดตาราง User ใหม่
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("เกิดข้อผิดพลาดในการบล็อกผู้ใช้");
+                });
+            }
+
+            function deleteUser(userId) {
+                fetch('/smartyoga-api/delete_user.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId }),
+                    credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    loadUsers(); // โหลดตาราง User ใหม่
+                });
+            }
+
+            // --- 7. จัดการปุ่ม Logout ---
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+                    .then(() => {
+                        alert('ออกจากระบบสำเร็จ');
+                        window.location.href = '../frontend-user/login/login.html';
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

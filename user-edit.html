@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User | Admin</title>
+    <link rel="stylesheet" href="newmange.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar"> ... </aside>
+
+        <main class="main-content">
+            <header class="main-header"><h1>Edit User</h1></header>
+            <div class="form-container">
+                <form id="editForm">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <p id="status-message"></p>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('id');
+
+            // 1. ดึงข้อมูลเก่ามาใส่ในฟอร์ม
+            fetch(`/smartyoga-api/get_user_by_id.php?id=${userId}`, { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('userId').value = data.id;
+                    document.getElementById('username').value = data.username;
+                    document.getElementById('email').value = data.email;
+                    document.getElementById('role').value = data.role;
+                });
+
+            // 2. จัดการการ submit ฟอร์ม
+            document.getElementById('editForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const updatedData = {
+                    id: document.getElementById('userId').value,
+                    username: document.getElementById('username').value,
+                    email: document.getElementById('email').value,
+                    role: document.getElementById('role').value,
+                };
+                fetch('/smartyoga-api/update_user.php', {
+                    method: 'POST',
+                    body: JSON.stringify(updatedData),
+                    credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/frontend-admin/dashboard.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Yoga Challenge | SmartYoga AI</title>
+    <link rel="stylesheet" href="challenge-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="challenge-wrapper" id="training-screen">
+        <div class="top-bar">
+            <h1 id="challenge-title">Yoga Challenge</h1>
+            <div id="stage-counter" class="stage-counter">Stage 1 / 10</div>
+        </div>
+        <div class="main-content">
+            <div class="reference-panel">
+                <h2 id="pose-title">Pose Name</h2>
+                <img src="placeholder.jpg" id="reference-image" class="reference-image" alt="Reference Pose">
+            </div>
+            <div class="trainer-panel">
+                <div class="container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="output_canvas" width="640" height="480"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-bar">
+            <div class="feedback-container">
+                <div id="feedback-status" class="status">-</div>
+                <div id="feedback-accuracy" class="accuracy">Accuracy: 0%</div>
+            </div>
+            <button id="skip-btn" class="skip-btn">Skip Pose</button>
+        </div>
+    </div>
+
+    <div id="summary-screen" class="summary-screen">
+        <div class="summary-box">
+            <h1>Challenge Complete!</h1>
+            <p id="summary-score">You passed 0 / 10 poses.</p>
+            <a href="/frontend-user/pange1.html" style="color: #c5a878; font-size: 1.2rem;">กลับหน้าหลัก</a>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- 1. การตั้งค่าตัวแปร ---
+        const ui = {
+            challengeTitle: document.getElementById('challenge-title'),
+            stageCounter: document.getElementById('stage-counter'),
+            poseTitle: document.getElementById('pose-title'),
+            referenceImage: document.getElementById('reference-image'),
+            feedbackStatus: document.getElementById('feedback-status'),
+            feedbackAccuracy: document.getElementById('feedback-accuracy'),
+            skipBtn: document.getElementById('skip-btn'),
+            trainingScreen: document.getElementById('training-screen'),
+            summaryScreen: document.getElementById('summary-screen'),
+            summaryScore: document.getElementById('summary-score')
+        };
+        
+        let masterPoseData, poseChallengeList = [], currentStage = 0, posesPassed = 0;
+        let correctPoseTimer = null, isPoseSavedForCurrentStage = false;
+        const POSE_HOLD_DURATION = 3000;
+        const ACCURACY_THRESHOLD = 90;
+
+        // --- 2. ฟังก์ชัน onResults และการคำนวณ (เหมือนเดิม) ---
+        function onResults(results) { /* ... คัดลอกฟังก์ชัน onResults และ calculateAngle จาก basic-challenge.html มาวางที่นี่ ... */ }
+        
+        // --- 3. ฟังก์ชันจัดการเกม ---
+        function setupStage(stageIndex) {
+            if (stageIndex >= poseChallengeList.length) {
+                showSummary();
+                return;
+            }
+            currentStage = stageIndex;
+            isPoseSavedForCurrentStage = false;
+            clearTimeout(correctPoseTimer);
+            correctPoseTimer = null;
+
+            const currentPose = poseChallengeList[currentStage];
+            ui.stageCounter.textContent = `Stage ${currentStage + 1} / ${poseChallengeList.length}`;
+            ui.poseTitle.textContent = currentPose.title;
+            // แก้ไข path รูปภาพสำหรับ XAMPP
+            ui.referenceImage.src = currentPose.file_path.replace('/images/', '/frontend-user/images/');
+            ui.feedbackStatus.textContent = '-';
+            ui.feedbackAccuracy.textContent = 'Accuracy: 0%';
+            ui.feedbackStatus.style.color = 'white';
+        }
+
+        function skipStage() {
+            saveResultToDatabase(poseChallengeList[currentStage].title, 'skipped');
+            setupStage(currentStage + 1);
+        }
+
+        function showSummary() {
+            ui.trainingScreen.style.display = 'none';
+            ui.summaryScreen.style.display = 'flex';
+            ui.summaryScore.textContent = `You passed ${posesPassed} / ${poseChallengeList.length} poses.`;
+        }
+
+        function saveResultToDatabase(poseName, result) {
+            fetch('/smartyoga-api/save_progress.php', {
+                method: 'POST', body: JSON.stringify({ pose_name: poseName, result: result }),
+                headers: { 'Content-Type': 'application/json' }, credentials: 'include'
+            }).then(res => res.json()).then(data => console.log(data.message));
+        }
+
+        // --- 4. เริ่มต้น Challenge ---
+        async function startChallenge() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const level = urlParams.get('level') || 'basic'; // ค่าเริ่มต้นคือ basic
+            
+            ui.challengeTitle.textContent = `${level.charAt(0).toUpperCase() + level.slice(1)} Challenge`;
+
+            const poseDataResponse = await fetch('/frontend-user/poses_data.json');
+            masterPoseData = await poseDataResponse.json();
+
+            const challengeListResponse = await fetch(`/smartyoga-api/get_${level}_poses.php`);
+            poseChallengeList = await challengeListResponse.json();
+
+            if (poseChallengeList.length > 0) {
+                setupStage(0);
+                // ... โค้ด initializeTrainer() และ MediaPipe ทั้งหมด ...
+            } else {
+                ui.poseTitle.textContent = "Error: Could not load poses.";
+            }
+        }
+        
+        ui.skipBtn.addEventListener('click', skipStage);
+        startChallenge();
+    </script>
+</body>
+</html>

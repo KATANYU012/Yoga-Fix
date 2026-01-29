@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Calibration Tool</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; background-color: #1a1a1a; color: white; }
+        .wrapper { display: flex; gap: 20px; align-items: flex-start; padding: 20px; }
+        .container { position: relative; width: 640px; height: 480px; }
+        #webcam, #output_canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+        .feedback-panel { width: 300px; padding: 10px; background-color: #222; border-radius: 8px; }
+        #angle-list { list-style: none; padding: 0; font-family: monospace; font-size: 1.1rem; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <video id="webcam" autoplay playsinline></video>
+            <canvas id="output_canvas" width="640" height="480"></canvas>
+        </div>
+        <div class="feedback-panel">
+            <h3>Live Body Angles</h3>
+            <ul id="angle-list">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const angleListElement = document.getElementById('angle-list');
+
+        function calculateAngle(p1, p2, p3) {
+            const angle = Math.atan2(p3.y - p2.y, p3.x - p2.x) - Math.atan2(p1.y - p2.y, p1.x - p2.x);
+            let degrees = Math.abs(angle * 180.0 / Math.PI);
+            return degrees > 180.0 ? 360 - degrees : degrees;
+        }
+
+        function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.poseLandmarks) {
+                drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, { color: '#c5a878', lineWidth: 3 });
+                drawLandmarks(canvasCtx, results.poseLandmarks, { color: '#f0f0f0', lineWidth: 1, radius: 3 });
+
+                const l = results.poseLandmarks;
+                let angleHtml = '';
+
+                // คำนวณและสร้าง HTML สำหรับแสดงผล
+                const angles = {
+                    'L-Elbow': l[11] && l[13] && l[15] ? calculateAngle(l[11], l[13], l[15]) : null,
+                    'R-Elbow': l[12] && l[14] && l[16] ? calculateAngle(l[12], l[14], l[16]) : null,
+                    'L-Shoulder': l[13] && l[11] && l[23] ? calculateAngle(l[13], l[11], l[23]) : null,
+                    'R-Shoulder': l[14] && l[12] && l[24] ? calculateAngle(l[14], l[12], l[24]) : null,
+                    'L-Hip': l[11] && l[23] && l[25] ? calculateAngle(l[11], l[23], l[25]) : null,
+                    'R-Hip': l[12] && l[24] && l[26] ? calculateAngle(l[12], l[24], l[26]) : null,
+                    'L-Knee': l[23] && l[25] && l[27] ? calculateAngle(l[23], l[25], l[27]) : null,
+                    'R-Knee': l[24] && l[26] && l[28] ? calculateAngle(l[24], l[26], l[28]) : null,
+                };
+                
+                for (const name in angles) {
+                    if (angles[name] !== null) {
+                        angleHtml += `<li>${name}: ${angles[name].toFixed(0)}°</li>`;
+                    }
+                }
+                angleListElement.innerHTML = angleHtml;
+            }
+            canvasCtx.restore();
+        }
+
+        const pose = new Pose({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}` });
+        pose.setOptions({ modelComplexity: 1, smoothLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+        pose.onResults(onResults);
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => { await pose.send({ image: videoElement }); },
+            width: 640, height: 480
+        });
+        camera.start();
+    </script>
+</body>
+</html>

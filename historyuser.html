@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice History | SmartYoga AI</title>
+    <link rel="stylesheet" href="page/page1.css">
+    <link rel="stylesheet" href="historyuser.css">
+    <link rel="stylesheet" href="navbar-style.css">
+</head>
+    </div>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="nav-con">
+                <div class="logo">
+                    <a href="/frontend-user/page/page1.html"><img src="LOGO.png" alt="YOGA Logo" style="height: 60px;"></a>
+                </div>
+                <ul class="menu">
+                    <li><a href="/frontend-user/page/page1.html">HOME</a></li>
+                    <li><a href="/frontend-user/tutorial.html">TUTORIAL</a></li>
+                    <li><a href="/frontend-user/news.html">NEWS</a></li>
+                    <li><a href="/frontend-user/poses.html" class="active">POSES</a></li>
+                    <li id="user-menu-item" style="display: none;">
+                        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <header class="hero-history">
+        <h1>Practice History</h1>
+        <p>ติดตามความก้าวหน้าและดูเส้นทางการฝึกโยคะของคุณที่นี่</p>
+    </header>
+
+    <main class="history-container">
+        <div class="history-column" id="challenge-history-container">
+            <h2>Challenge Summary</h2>
+            <div id="challenge-summary-list">
+                </div>
+        </div>
+        <div class="history-column" id="pose-history-container">
+            <h2>Recent Poses</h2>
+            <div id="pose-progress-list">
+                </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- 1. ตรวจสอบสถานะการล็อกอินก่อนเป็นอันดับแรก ---
+        fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.isLoggedIn) {
+                    // ถ้าล็อกอินอยู่ ให้เริ่มโหลดข้อมูลประวัติ
+                    loadUserHistory();
+
+                    // (ส่วนจัดการเมนู Top Bar - ควรมีในทุกหน้า)
+                    const welcomeLink = document.getElementById('welcome-link');
+                    // ... (โค้ดจัดการเมนูอื่นๆ) ...
+                    if(welcomeLink) {
+                        welcomeLink.textContent = 'Welcome, ' + data.user.username;
+                    }
+
+                } else {
+                    // ถ้ายังไม่ได้ล็อกอิน
+                    alert('กรุณาเข้าสู่ระบบเพื่อดูประวัติการเล่น');
+                    window.location.href = '/frontend-user/login/login.html'; // ส่งกลับไปหน้า Login
+                }
+            })
+            .catch(() => {
+                // กรณีที่เกิดข้อผิดพลาดในการเชื่อมต่อ API
+                alert('เกิดข้อผิดพลาดในการตรวจสอบสถานะ กรุณาลองใหม่');
+                window.location.href = '/frontend-user/login/login.html';
+            });
+
+        // --- 2. ฟังก์ชันสำหรับโหลดและแสดงผลประวัติ (จะถูกเรียกใช้เมื่อล็อกอินแล้วเท่านั้น) ---
+        function loadUserHistory() {
+            const challengeList = document.getElementById('challenge-summary-list');
+            const poseList = document.getElementById('pose-progress-list');
+            const historyContainer = document.querySelector('.history-container');
+
+            // ทำให้ส่วนเนื้อหาแสดงขึ้นมา
+            if(historyContainer) historyContainer.style.display = 'grid';
+
+            fetch('/smartyoga-api/get_user_history.php', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    // แสดงผลสรุป Challenge
+                    if (data.challenge_summary && data.challenge_summary.length > 0) {
+                        challengeList.innerHTML = '';
+                        data.challenge_summary.forEach(summary => {
+                            const card = document.createElement('div');
+                            card.className = 'summary-card';
+                            card.innerHTML = `
+                                <div class="summary-card-header">
+                                    <h3>${summary.challenge_level.toUpperCase()} Challenge</h3>
+                                    <span class="date">${new Date(summary.played_at).toLocaleDateString('th-TH')}</span>
+                                </div>
+                                <div class="summary-card-body">
+                                    Passed: <span>${summary.poses_passed} / ${summary.total_poses}</span> Poses
+                                </div>
+                            `;
+                            challengeList.appendChild(card);
+                        });
+                    } else {
+                        challengeList.innerHTML = '<p class="empty-state">ยังไม่มีประวัติการเล่น Challenge</p>';
+                    }
+
+                    // แสดงประวัติรายท่า
+                    if (data.pose_progress && data.pose_progress.length > 0) {
+                        poseList.innerHTML = '';
+                        data.pose_progress.forEach(progress => {
+                            const item = document.createElement('div');
+                            item.className = 'progress-list-item';
+                            item.innerHTML = `
+                                <span class="pose-name">${progress.pose_name}</span>
+                                <span class="result-badge result-${progress.result}">${progress.result.toUpperCase()}</span>
+                            `;
+                            poseList.appendChild(item);
+                        });
+                    } else {
+                        poseList.innerHTML = '<p class="empty-state">ยังไม่มีประวัติการฝึกท่า</p>';
+                    }
+                });
+        }
+    });
+    </script>
+</body>
+</html>

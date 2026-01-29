@@ -1,0 +1,173 @@
+body {
+    margin: 0;
+    font-family: 'Prompt', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('yoga1.1.png') center/cover no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .bg-overlay {
+    backdrop-filter: blur(6px);
+    background-color: rgba(20, 20, 30, 0.7);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    max-width: 450px;
+    width: 100%;
+  }
+  
+  /* กล่องฟอร์ม */
+  .signup-box {
+    color: #f8f8f8;
+  }
+  
+  .signup-box h1 {
+    font-family: 'Playfair Display', serif;
+    color: #f7d774;
+    font-size: 32px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+  
+  .signup-box .subtitle {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #c9c9c9;
+  }
+  
+  label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #2e2e3e;
+    color: #fff;
+    font-size: 15px;
+    transition: background-color 0.3s;
+  }
+  
+  input::placeholder {
+    color: #aaa;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    background-color: #3e3e55;
+  }
+  
+  /* ปุ่ม */
+  /* ปรับขนาดและสไตล์ของปุ่ม */
+.btn-row button {
+  width: 48%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.submit-btn {
+  background-color: #f7d774;
+  color: #000;
+}
+
+.reset-btn {
+  background-color: #444;
+  color: #fff;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+  
+  .submit-btn {
+    background-color: #f7d774;
+    color: #000;
+  }
+  
+  .reset-btn {
+    background-color: #444;
+    color: #fff;
+  }
+  
+  button:hover {
+    transform: scale(1.03);
+  }
+  
+  .password-wrapper {
+    position: relative;
+  }
+  
+  .password-wrapper input {
+    padding-right: 10px; /* space สำหรับไอคอน */
+  }
+  
+  .toggle-icon {
+    display: flex;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #f7d774;
+    font-size: 18px;
+    user-select: none;
+  }
+
+  .form-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px; /* เพิ่มระยะห่างใต้โลโก้ */
+    width: 80px; /* ปรับขนาดความกว้างตามต้องการ */
+    height: auto;
+}
+
+.password-wrapper { position: relative; }
+.password-wrapper input { padding-right: 10px; }
+
+.toggle-icon{
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  color: #f9e0b2;
+  line-height: 1;
+}
+.toggle-icon:focus { outline: 2px solid rgba(197,168,120,.6); outline-offset: 2px; }
+
+.reset-btn {
+  display: inline-block;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: #444;
+  color: #fff;
+  text-align: center;
+  text-decoration: none; /* ลบเส้นใต้ */
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.reset-btn:hover {
+  transform: scale(1.03);
+}

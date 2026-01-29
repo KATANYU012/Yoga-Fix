@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Yoga Poses | SmartYoga AI</title>
+    <link rel="stylesheet" href="page/page1.css">
+    <link rel="stylesheet" href="instructional-style.css">
+    <link rel="stylesheet" href="navbar-style.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <div class="nav-con">
+                <div class="logo">
+                    <a href="/frontend-user/page/page1.html"><img src="LOGO.png" alt="YOGA Logo" style="height: 60px;"></a>
+                </div>
+                <ul class="menu">
+                    <li><a href="/frontend-user/page/page1.html">HOME</a></li>
+                    <li><a href="/frontend-user/tutorial.html">TUTORIAL</a></li>
+                    <li><a href="/frontend-user/news.html">NEWS</a></li>
+                    <li><a href="/frontend-user/poses.html" class="active">POSES</a></li>
+                    <li id="user-menu-item" style="display: none;">
+                        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <header class="page-header">
+            <h1>Basic Poses</h1>
+            <p>เริ่มต้นเส้นทางการฝึกโยคะของคุณด้วยท่าพื้นฐานที่สำคัญเหล่านี้ ช่วยสร้างความแข็งแรง ความยืดหยุ่น และสมาธิ</p>
+        </header>
+
+        <main class="pose-grid">
+            </main>
+
+        <nav class="page-navigation">
+            <a href="advanced-poses.html" class="nav-button">ไปยังหน้าท่า Advance</a>
+        </nav>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const poseGrid = document.querySelector('.pose-grid');
+        const pageTitle = document.title;
+        
+        const currentLevel = pageTitle.includes('Basic') ? 'Basic' : 'Advanced';
+
+        fetch('/smartyoga-api/get_media.php', { credentials: 'include' })
+            .then(response => response.json())
+            .then(allPoses => {
+                if (!poseGrid) return;
+
+                const filteredPoses = allPoses.filter(pose => pose.level === currentLevel);
+
+                poseGrid.innerHTML = ''; // ล้างข้อมูลเก่า
+
+                filteredPoses.forEach(pose => {
+                    const card = document.createElement('article');
+                    card.className = 'pose-card';
+
+                    const benefitsList = pose.benefits ? pose.benefits.split('\n').map(item => `<li>${item.trim()}</li>`).join('') : '<li>ไม่มีข้อมูล</li>';
+                    const risksList = pose.risks ? pose.risks.split('\n').map(item => `<li>${item.trim()}</li>`).join('') : '<li>ไม่มีข้อมูล</li>';
+
+                    // ✅ FIX: เปลี่ยนจาก <img> กลับมาเป็น <video>
+                    card.innerHTML = `
+                        <div class="pose-video-wrapper">
+                            <video src="/smartyoga-api/${pose.file_path}" loop autoplay muted playsinline></video>
+                        </div>
+                        <div class="pose-content">
+                            <h2 class="pose-title">${pose.title}</h2>
+                            
+                            <h3 class="pose-section-title benefits"><span>✅</span> ประโยชน์ของท่านี้</h3>
+                            <ul class="pose-list">
+                                ${benefitsList}
+                            </ul>
+
+                            <h3 class="pose-section-title risks"><span>⚠️</span> ข้อควรระวังและอาการบาดเจ็บ</h3>
+                            <ul class="pose-list">
+                                ${risksList}
+                            </ul>
+                        </div>
+                    `;
+                    
+                    poseGrid.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching yoga poses:', error);
+                if (poseGrid) {
+                    poseGrid.innerHTML = '<p style="color: red; text-align: center;">เกิดข้อผิดพลาดในการโหลดข้อมูลท่าโยคะ</p>';
+                }
+            });
+    });
+    </script>
+</body>
+</html>

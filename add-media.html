@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Pose | Admin Panel</title>
+    <link rel="stylesheet" href="newmange.css"> 
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>SmartYoga AI</h2>
+                <span>Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/frontend-admin/dashboard.html">Dashboard</a></li>
+                    <li><a href="/frontend-admin/media.html" class="active">Media Management</a></li>
+                    <li><a href="/frontend-admin/news-management.html">News Management</a></li>
+                    <li><a href="#" id="logout-btn">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Add New Yoga Pose</h1>
+            </header>
+            
+            <div class="form-container">
+                <form id="add-media-form" enctype="multipart/form-data">
+                    
+                    <div class="form-grid-2col">
+                        
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="title">Pose Title</label>
+                                <input type="text" id="title" name="title" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="level">Difficulty Level</label>
+                                <select id="level" name="level" required>
+                                    <option value="Basic">Basic</option>
+                                    <option value="Advanced">Advanced</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea id="description" name="description" rows="5" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-column">
+                            <div class="form-group">
+                                <label for="mediaFile">Image/Video File</label>
+                                <div class="file-upload-wrapper">
+                                    <img src="" id="file-preview" class="file-preview-hidden" alt="File Preview">
+                                    <div id="file-upload-placeholder">
+                                        <span>+</span>
+                                        <small>Click to upload (PNG, JPG, MP4)</small>
+                                    </div>
+                                    <input type="file" id="mediaFile" name="mediaFile" required accept="image/*,video/mp4">
+                                </div>
+                            </div>
+                        </div>
+                    </div> <div class="form-group">
+                        <label for="benefits">Benefits (ใส่ 1 ข้อต่อ 1 บรรทัด)</label>
+                        <textarea id="benefits" name="benefits" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="risks">Risks / Cautions (ใส่ 1 ข้อต่อ 1 บรรทัด)</label>
+                        <textarea id="risks" name="risks" rows="5" required></textarea>
+                    </div>
+
+                    <p id="status-message" class="status-message"></p>
+                    <button type="submit">Add Pose</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- (โค้ด Check Session และ Logout เหมือนเดิม) ---
+        fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.isLoggedIn || data.user.role !== 'admin') {
+                    window.location.href = '/frontend-user/login.html';
+                }
+            });
+        
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+            .then(() => {
+                alert('ออกจากระบบสำเร็จ');
+                window.location.href = '/frontend-user/login/login.html';
+            });
+        });
+
+        // --- จัดการฟอร์ม ---
+        const addMediaForm = document.getElementById('add-media-form');
+        addMediaForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const statusEl = document.getElementById('status-message');
+            const submitBtn = addMediaForm.querySelector('button[type="submit"]');
+            const formData = new FormData(addMediaForm);
+
+            submitBtn.disabled = true;
+            statusEl.textContent = 'กำลังอัปโหลด...';
+
+            fetch('/smartyoga-api/upload_media.php', {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(data => {
+                statusEl.textContent = data.message;
+                submitBtn.disabled = false;
+                if (data.message.includes('สำเร็จ')) {
+                    addMediaForm.reset();
+                    document.getElementById('file-preview').classList.add('file-preview-hidden');
+                    document.getElementById('file-upload-placeholder').style.display = 'flex';
+                }
+            });
+        });
+
+        // --- JavaScript สำหรับ Preview รูปภาพ ---
+        const mediaFileInput = document.getElementById('mediaFile');
+        const filePreview = document.getElementById('file-preview');
+        const filePlaceholder = document.getElementById('file-upload-placeholder');
+
+        mediaFileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (file.type.startsWith('video/')) {
+                        filePreview.src = '';
+                        filePlaceholder.style.display = 'flex';
+                        filePlaceholder.querySelector('span').textContent = '🎬';
+                        filePlaceholder.querySelector('small').textContent = file.name;
+                    } else {
+                        filePreview.src = e.target.result;
+                        filePreview.classList.remove('file-preview-hidden');
+                        filePlaceholder.style.display = 'none';
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    </script>
+</body>
+</html>

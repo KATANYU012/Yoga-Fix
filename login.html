@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>เข้าสู่ระบบ</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <form id="loginForm" onsubmit="return validateLogin()">
+  <a href="../page/page1.html">
+    <img src="LOGO.png" alt="YOGA Logo" class="form-logo">
+  </a>
+    <h2>เข้าสู่ระบบ</h2>
+    <label for="username">ชื่อผู้ใช้</label>
+    <input type="text" id="username" name="username" required placeholder="กรอกชื่อผู้ใช้" />
+    <label for="password">รหัสผ่าน</label>
+    <div class="password-wrapper">
+      <input type="password" id="password" name="password" required placeholder="กรอกรหัสผ่าน" autocomplete="current-password" />
+      <span id="togglePassword" 
+      class="toggle-password" 
+      title="แสดง/ซ่อนรหัสผ่าน" 
+      aria-label="แสดง/ซ่อนรหัสผ่าน"
+      role="button"
+      tabindex="0">⦾</span>
+    </div>
+
+    <p id="error" class="error"></p>
+
+    <button type="submit">เข้าสู่ระบบ</button>
+
+    <p>ยังไม่มีบัญชี? <a href="../signup/signup.html">สมัครสมาชิกที่นี่</a></p>
+  </form>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '⦾' : '⦿';
+    });
+
+  function validateLogin() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const errorEl = document.getElementById("error");
+    const submitButton = document.querySelector('#loginForm button[type="submit"]');
+
+    errorEl.textContent = "";
+    if (username === "" || password === "") {
+        errorEl.textContent = "กรุณากรอกข้อมูลให้ครบถ้วน";
+        return false;
+    }
+
+    submitButton.disabled = true;
+    errorEl.textContent = "กำลังตรวจสอบ...";
+
+    fetch('/smartyoga-api/login_api.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, password: password }),
+        credentials: 'include'
+    })
+    .then(response => response.json())
+    .then(data => {
+        submitButton.disabled = false;
+        errorEl.textContent = "";
+
+        if (data.status === "success") {
+            alert(data.message);
+            if (data.user.role === 'admin') {
+                window.location.href = '/frontend-admin/dashboard.html';
+            } else {
+                // แก้ไข Path ไปยังหน้าแรก
+                window.location.href = '/frontend-user/page/page1.html'; 
+            }
+        } else {
+            errorEl.textContent = data.message;
+        }
+    })
+    .catch(error => {
+        submitButton.disabled = false;
+        errorEl.textContent = "เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์";
+        console.error('Error:', error);
+    });
+
+    return false;
+}
+  </script>
+</body>
+</html>

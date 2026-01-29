@@ -1,0 +1,95 @@
+/* === Navbar Style (ใช้สำหรับทุกหน้า) === */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+:root {
+    --primary-text: #ffffff;
+    --accent-color: #c5a878;
+    --border-color: #333333;
+}
+
+.top-bar {
+    background: rgba(26, 26, 26, 0.9); /* ทำให้ทึบขึ้นเล็กน้อย */
+    backdrop-filter: blur(5px);
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.top-bar .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-con {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    height: 60px; /* ปรับขนาดโลโก้ให้เหมาะสม */
+    display: block;
+}
+
+.menu {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    margin: 0 15px;
+}
+
+.menu li a {
+    color: var(--primary-text);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 14px;
+    transition: color 0.3s, border-bottom-color 0.3s;
+    padding: 5px 0;
+    border-bottom: 2px solid transparent; /* เตรียมเส้นใต้สำหรับ hover */
+}
+
+.menu li a:hover,
+.menu li a.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color); /* แสดงเส้นใต้เมื่อ active หรือ hover */
+}
+
+/* --- ปุ่ม Login/Signup/Logout --- */
+.signup-menu-btn, .login-menu-btn {
+    background-color: var(--accent-color);
+    color: #1a1a1a !important; /* !important เพื่อให้สีตัวอักษรเปลี่ยน */
+    padding: 8px 15px;
+    border-radius: 5px;
+    border-bottom: none !important; /* ไม่ต้องมีเส้นใต้ */
+}
+
+.signup-menu-btn:hover, .login-menu-btn:hover {
+    background-color: #dfcba8;
+}
+
+#user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#logout-btn {
+    font-size: 0.9rem;
+    color: #ff6b6b !important; /* สีแดงสำหรับ Logout */
+    border-bottom: none !important;
+}
+
+#logout-btn:hover {
+    color: #ff4757 !important;
+}

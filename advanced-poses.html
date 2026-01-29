@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Yoga Poses | SmartYoga AI</title>
+    <link rel="stylesheet" href="page/page1.css">
+    <link rel="stylesheet" href="instructional-style.css">
+    <link rel="stylesheet" href="navbar-style.css">
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="nav-con">
+                <div class="logo">
+                    <a href="/frontend-user/page/page1.html"><img src="LOGO.png" alt="YOGA Logo" style="height: 60px;"></a>
+                </div>
+                <ul class="menu">
+                    <li><a href="/frontend-user/page/page1.html">HOME</a></li>
+                    <li><a href="/frontend-user/tutorial.html">TUTORIAL</a></li>
+                    <li><a href="/frontend-user/news.html" class="active">NEWS</a></li>
+                    <li><a href="/frontend-user/poses.html">POSES</a></li>
+                    <li id="user-menu-item" style="display: none;">
+                        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        <div class="page-container">
+            <header class="page-header">
+            <h1>Advanced Poses</h1>
+            <p>ท้าทายขีดจำกัดของร่างกายและจิตใจด้วยท่าโยคะระดับสูง ที่ต้องอาศัยทั้งความแข็งแรง ความยืดหยุ่น และการทรงตัว</p>
+        </header>
+
+        <main class="pose-grid">
+
+            </main>
+
+        <nav class="page-navigation">
+            <a href="basic-poses.html" class="nav-button">ไปยังหน้าท่า Basic</a>
+        </nav>
+    </div>
+
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const poseGrid = document.querySelector('.pose-grid');
+    const pageTitle = document.title;
+    
+    // ตรวจสอบจาก Title ของหน้าว่าเป็น 'Basic' หรือ 'Advanced'
+    const currentLevel = pageTitle.includes('Basic') ? 'Basic' : 'Advanced';
+
+    // 1. ส่งคำขอเพื่อดึงข้อมูลท่าโยคะทั้งหมดจาก API
+    fetch('/smartyoga-api/get_media.php', { credentials: 'include' })
+        .then(response => response.json())
+        .then(allPoses => {
+            if (!poseGrid) return;
+
+            // 2. กรองข้อมูลเฉพาะท่าที่ตรงกับ Level ของหน้านี้
+            const filteredPoses = allPoses.filter(pose => pose.level === currentLevel);
+
+            // 3. ล้างข้อมูลเก่าที่ Hardcode ไว้ออกไป
+            poseGrid.innerHTML = '';
+
+            // 4. วนลูปสร้างการ์ดแสดงผลสำหรับแต่ละท่า
+            filteredPoses.forEach(pose => {
+                const card = document.createElement('article');
+                card.className = 'pose-card';
+
+                // แปลงข้อความ benefits และ risks ที่มีหลายบรรทัดให้เป็น list <li>
+                const benefitsList = pose.benefits ? pose.benefits.split('\n').map(item => `<li>${item.trim()}</li>`).join('') : '<li>ไม่มีข้อมูล</li>';
+                const risksList = pose.risks ? pose.risks.split('\n').map(item => `<li>${item.trim()}</li>`).join('') : '<li>ไม่มีข้อมูล</li>';
+
+                // 5. สร้างโค้ด HTML สำหรับการ์ดแต่ละใบ
+                card.innerHTML = `
+                    <div class="pose-video-wrapper">
+                        <video src="/smartyoga-api/${pose.file_path}" loop autoplay muted playsinline></video>
+                    </div>
+                    <div class="pose-content">
+                        <h2 class="pose-title">${pose.title}</h2>
+                        
+                        <h3 class="pose-section-title benefits"><span>✅</span> ประโยชน์ของท่านี้</h3>
+                        <ul class="pose-list">
+                            ${benefitsList}
+                        </ul>
+
+                        <h3 class="pose-section-title risks"><span>⚠️</span> ข้อควรระวังและอาการบาดเจ็บ</h3>
+                        <ul class="pose-list">
+                            ${risksList}
+                        </ul>
+                    </div>
+                `;
+                
+                // 6. นำการ์ดที่สร้างเสร็จแล้วไปแสดงผลใน Grid
+                poseGrid.appendChild(card);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching yoga poses:', error);
+            if (poseGrid) {
+                poseGrid.innerHTML = '<p style="color: red; text-align: center;">เกิดข้อผิดพลาดในการโหลดข้อมูลท่าโยคะ</p>';
+            }
+        });
+});
+</script>
+</html>

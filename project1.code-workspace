@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"name": "project1",
+			"path": "../../../../project1"
+		},
+		{
+			"name": "smartyoga-api",
+			"path": "../../smartyoga-api"
+		},
+		{
+			"name": "frontend-admin",
+			"path": "../../frontend-admin"
+		},
+		{
+			"name": "frontend-user",
+			"path": ".."
+		},
+		{
+			"name": "YogaProject",
+			"path": "../../../../YogaProject"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "frontend-user",
+		"liveServer.settings.port": 5501
+	}
+}

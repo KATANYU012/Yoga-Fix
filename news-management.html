@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>News Management | Admin Panel</title>
+    <link rel="stylesheet" href="newmange.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>SmartYoga AI</h2>
+                <span>Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/frontend-admin/dashboard.html">Dashboard</a></li>
+                    <li><a href="/frontend-admin/media.html">Media Management</a></li>
+                    <li><a href="/frontend-admin/news-management.html" class="active">News Management</a></li>
+                    <li><a href="/frontend-user/login/login.html" id="logout-btn">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>News Management</h1>
+                <a href="/frontend-admin/news-add.html" class="add-new-btn">Add New Article</a>
+            </header>
+
+            <section class="data-table-container">
+                <h2>All News Articles</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="news-table-body">
+                        </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsTableBody = document.getElementById('news-table-body');
+
+            // ตรวจสอบ Session ก่อน (เหมือนเดิม)
+            fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.isLoggedIn || data.user.role !== 'admin') {
+                        window.location.href = '/frontend-user/login.html';
+                    } else {
+                        loadNews();
+                    }
+                });
+
+            function loadNews() {
+                fetch('/smartyoga-api/get_all_news.php', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(newsItems => {
+                        newsTableBody.innerHTML = '';
+                        newsItems.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${item.id}</td>
+                                <td>${item.title}</td>
+                                <td>${item.author_name}</td>
+                                <td>${new Date(item.created_at).toLocaleDateString('th-TH')}</td>
+                                <td>
+                                    <button class="action-btn delete-btn" data-id="${item.id}">Delete</button>
+                                </td>
+                            `;
+                            newsTableBody.appendChild(row);
+                        });
+                    });
+            }
+
+            newsTableBody.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-btn')) {
+                    const newsId = e.target.getAttribute('data-id');
+                    if (confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบข่าว ID: ${newsId}?`)) {
+                        fetch('/smartyoga-api/delete_news.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: newsId }),
+                            credentials: 'include'
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            alert(data.message);
+                            loadNews();
+                        });
+                    }
+                }
+            });
+
+            // --- จัดการปุ่ม Logout ---
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+                    .then(() => {
+                        alert('ออกจากระบบสำเร็จ');
+                        window.location.href = '/frontend-user/login/login.html';
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

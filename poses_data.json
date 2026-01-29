@@ -1,0 +1,158 @@
+{
+"Tree Pose": {
+        "level": "Basic",
+        "angles": {
+            "standing_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 165, "max": 195 },
+            "standing_hip": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 165, "max": 195 },
+            "bent_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 30, "max": 60 },
+            "bent_hip_open": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 110, "max": 145 },
+            "elbows_prayer": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 25, "max": 60 }
+        }
+    },
+    "Table Top Pose": {
+        "level": "Basic",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 160, "max": 195 },
+            "shoulders": { "p1": "elbow", "p2": "shoulder", "p3": "hip", "min": 65, "max": 95 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 80, "max": 110 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 80, "max": 110 }
+        } 
+    },
+    "Easy Seat Pose": {
+        "level": "Basic",
+        "angles": {
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 70, "max": 110 }
+        }
+    },
+    "Warrior Pose": {
+        "level": "Basic",
+        "angles": {
+            "elbows_straight": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 160, "max": 195 },
+            "front_knee_bent": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 90, "max": 120 },
+            "back_knee_straight": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 165, "max": 195 },
+            "back_hip_extended": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 120, "max": 155 }
+        }
+    },
+    "Downward-Facing Dog": {
+        "level": "Basic",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 160, "max": 195 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 70, "max": 110 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 150, "max": 195 }
+        }
+    },
+    "Resting Pose": {
+        "level": "Basic",
+        "angles": {
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 170, "max": 190 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 170, "max": 190 }
+        }
+    },
+    "Plank Pose": {
+        "level": "Basic",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 70, "max": 100 },
+            "shoulders": { "p1": "elbow", "p2": "shoulder", "p3": "hip", "min": 65, "max": 95 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 160, "max": 190 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 160, "max": 190 }
+        }
+    },
+    "Child's Pose": {
+        "level": "Basic",
+        "angles": {
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 20, "max": 70 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 20, "max": 70 }
+        }
+    },
+    "Mountain Pose": {
+        "level": "Basic",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 170, "max": 195 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 170, "max": 195 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 170, "max": 195 }
+        }
+    },
+    "Cat-Cow Pose": {
+        "level": "Basic",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 160, "max": 195 },
+            "shoulders": { "p1": "elbow", "p2": "shoulder", "p3": "hip", "min": 80, "max": 110 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 80, "max": 110 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 80, "max": 110 }
+        }
+    },
+    "Crow Pose": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 80, "max": 110 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 45, "max": 75 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 45, "max": 80 }
+        }
+    },
+    "Headstand": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 80, "max": 110 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 170, "max": 190 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 170, "max": 190 }
+        }
+    },
+    "Scorpion Pose": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 80, "max": 120 },
+            "spine_arch": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 100, "max": 150 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 30, "max": 90 }
+        }
+    },
+    "King Pigeon Pose": {
+        "level": "Advanced",
+        "angles": {
+            "back_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 20, "max": 70 },
+            "front_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 80, "max": 120 }
+        }
+    },
+    "Bird of Paradise": {
+        "level": "Advanced",
+        "angles": {
+            "standing_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 160, "max": 190 },
+            "lifted_knee": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 150, "max": 190 }
+        }
+    },
+    "Eight-Angle Pose": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 80, "max": 110 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 140, "max": 180 }
+        }
+    },
+    "Side Plank (Vasisthasana)": {
+        "level": "Advanced",
+        "angles": {
+            "supporting_elbow": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 170, "max": 200 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "ankle", "min": 165, "max": 195 }
+        }
+    },
+    "Revolved Triangle Pose": {
+        "level": "Advanced",
+        "angles": {
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 170, "max": 200 },
+            "hips_twist": { "p1": "left_shoulder", "p2": "right_hip", "p3": "right_knee", "min": 80, "max": 120 }
+        }
+    },
+    "Wheel Pose (Urdhva Dhanurasana)": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 140, "max": 190 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 70, "max": 110 }
+        }
+    },
+    "Handstand": {
+        "level": "Advanced",
+        "angles": {
+            "elbows": { "p1": "shoulder", "p2": "elbow", "p3": "wrist", "min": 170, "max": 200 },
+            "hips": { "p1": "shoulder", "p2": "hip", "p3": "knee", "min": 170, "max": 200 },
+            "knees": { "p1": "hip", "p2": "knee", "p3": "ankle", "min": 170, "max": 200 }
+        }
+    }
+}

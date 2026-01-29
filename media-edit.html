@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Yoga Pose | Admin</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Edit Yoga Pose</h1>
+            </header>
+            <div class="form-container">
+                <form id="editForm">
+                    <input type="hidden" id="mediaId" name="id">
+                    <div class="form-group">
+                        <label for="title">Pose Title</label>
+                        <input type="text" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="benefits">Benefits</label>
+                        <textarea id="benefits" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="risks">Risks / Cautions</label>
+                        <textarea id="risks" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="level">Level</label>
+                        <select id="level" required>
+                            <option value="Basic">Basic</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <p id="status-message"></p>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mediaId = urlParams.get('id');
+
+            // 1. ดึงข้อมูลเก่ามาใส่ในฟอร์ม
+            fetch(`/smartyoga-api/get_media_by_id.php?id=${mediaId}`, { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('mediaId').value = data.media_id;
+                    document.getElementById('title').value = data.title;
+                    document.getElementById('description').value = data.description;
+                    document.getElementById('level').value = data.level;
+                    
+                    // ADDED: นำข้อมูล benefits และ risks มาแสดงในฟอร์ม
+                    document.getElementById('benefits').value = data.benefits;
+                    document.getElementById('risks').value = data.risks;
+                });
+
+            // 2. จัดการการ submit ฟอร์ม
+            document.getElementById('editForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // CHANGED: เพิ่ม benefits และ risks เข้าไปในข้อมูลที่จะส่งไปอัปเดต
+                const updatedData = {
+                    id: document.getElementById('mediaId').value,
+                    title: document.getElementById('title').value,
+                    description: document.getElementById('description').value,
+                    benefits: document.getElementById('benefits').value,
+                    risks: document.getElementById('risks').value,
+                    level: document.getElementById('level').value,
+                };
+
+                fetch('/smartyoga-api/update_media.php', {
+                    method: 'POST',
+                    body: JSON.stringify(updatedData),
+                    credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/frontend-admin/media.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

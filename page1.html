@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartYoga AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="page1.css">
+  <link rel="stylesheet" href="navbar-style.css">
+  <style>
+    body {
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      transition: background-image 0.6s ease-in-out;
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+      <div class="container">
+        <div class="nav.con">
+          <div class="logo">
+          <a href="page1.html">
+            <img src="LOGO.png" alt="YOGA Logo" style="height: 80px;">
+              </a>
+          </div>
+          <ul class="menu">
+    <li><a href="../page/page1.html">HOME</a></li>
+    <li><a href="../tutorial.html">TUTORIAL</a></li>
+    <li><a href="../poses.html">POSE</a></li>
+     <li id="signup-menu-item"><a href="../signup/signup.html" class="signup-menu-btn">Sign Up</a></li>
+    
+    <li id="user-menu-item" style="display: none;">
+        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+        <a href="/frontend-user/historyuser.html">History</a> 
+        <div id="session-timer-container">
+        Session expires in: <span id="session-timer">--:--</span>
+    </div>
+        <a href="../login/login.html" id="logout-btn">Logout</a>
+</li>
+    </li>
+</ul>
+        </div>
+      </div>
+  </div>
+    <body>
+
+    <main>
+        </main>
+    
+    </body>
+
+  <div class="header">
+    <h5 style="letter-spacing: 2px; color: #e3c48f; font-weight: 300; margin-bottom: 15px;">Today I will love myself enough to exercise.</h5>
+    <h1>SmartYoga AI<br>ElderMotion</h1>
+    <p>Sore today, strong tomorrow.</p>
+    <a href="../poses.html"><button class="btn">Let's start.</button></a>
+  </div>
+
+  <div class="nav-arrows">
+    <span onclick="prevSlide()">◀</span>
+    <span onclick="nextSlide()">▶</span>
+  </div>
+
+
+  <div class="item-grid">
+    <div class="item-card">
+        <div class="image-container">
+            <a href="../basic-challenge.html"><img src="basic.png" alt="Woman doing a yoga pose."></a>
+        </div>
+        <h3>Beginner Poses</h3>
+        <a href="../basic-challenge.html" class="view-link">VIEW POSES</a>
+    </div>
+    
+    <div class="item-card">
+        <div class="image-container">
+        <a href="../advanced-challenge.html"><img src="addvance.png" alt="Woman doing an advanced yoga pose."></a>
+        </div>
+        <h3>Advanced Poses</h3>
+        <a href="../advanced-challenge.html" class="view-link">VIEW POSES</a>
+    </div>
+
+    <div class="item-card">
+        <div class="image-container">
+            <a href="../tutorial.html"><img src="review_yoga.png" alt="Person meditating."></a>
+        </div>
+        <h3>Tutorial</h3>
+        <a href="#" class="view-link">VIEW SESSIONS</a>
+    </div>
+</div>
+
+<section class="story-section">
+  <div class="container">
+      <div class="story-grid">
+          <div class="story-text">
+              <p class="subtitle">TUTORIAL</p>
+              <h1>ประวัติของโยคะ</h1>
+              <p class="description">
+                นมัสเต และขอต้อนรับสู่การเดินทางบทใหม่ของคุณ โยคะ (Yoga) มีรากศัพท์มาจากภาษาสันสกฤตว่า "ยุจ" (Yuj) ซึ่งหมายถึง "การรวมกัน" หรือ "การเชื่อมต่อ" นี่คือหัวใจที่แท้จริงของโยคะ นั่นคือการเชื่อมโยงกาย (Body) และใจ (Mind) ให้เป็นหนึ่งเดียวกันผ่านลมหายใจ (Breath)
+              <div class="call-info">
+              </div>
+              <a href="../history.html" class="read-more-btn">อ่านเพิ่มเติม</a>
+          </div>
+
+          <div class="story-image-wrapper">
+              <img src="historyyoga.png" alt="Peaceful yoga studio interior.">
+              <div class="since-badge">
+                  <p class="since-text">SINCE</p>
+                  <p class="since-year">2024</p>
+              </div>
+               <div class="decorative-pattern"></div>
+          </div>
+      </div>
+  </div>
+</section>
+<section class="featured-item-section">
+    <div class="container">
+        <div class="item-grid-reversed">
+            <div class="item-image">
+                <img src="Tutorial.png" alt="Woman holding a warrior yoga pose.">
+            </div>
+
+            <div class="item-details">
+                <p class="subtitle">
+                    <span class="icon">⚑</span> YOGA BASIC POSE
+                </p>
+                <h2>Yoga Journal</h2>
+                <p class="description">
+                  สำหรับผู้ที่ไม่เคยฝึกโยคะมาก่อน อาจมองเห็นโยคะเป็นเพียงการทำท่าทางที่ดูสวยงามหรือยืดหยุ่น แต่แท้จริงแล้ว ทุกอาสนะ (Asana) หรือท่าโยคะที่เราทำ คือเครื่องมือที่ช่วยให้เรากลับมาอยู่กับปัจจุบันขณะ ช่วยให้เราได้สำรวจและทำความเข้าใจร่างกายของตนเอง และที่สำคัญที่สุด คือการฝึกฝนจิตใจให้สงบและมั่นคง
+                  ในพื้นที่แห่งนี้ เราจะเริ่มต้นไปด้วยกันอย่างช้าๆ ด้วยความเคารพต่อร่างกายของตนเอง ไม่มีการเปรียบเทียบ ไม่มีการแข่งขัน มีเพียงแค่คุณ เสื่อโยคะ และลมหายใจของคุณเท่านั้น
+                </p>
+                <p class="attribute">"ไม่ต้องรอให้ 'พร้อม'… แค่ 'เริ่ม' ก็พอ"</p>
+                <a href="../news.html" class="view-all-btn">ดูข้อมูลข่าวสาร</a>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+    <section class="instructional-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>เรียนรู้ท่าโยคะ</h2>
+            <p>เริ่มต้นสร้างพื้นฐานที่แข็งแรง หรือท้าทายขีดจำกัดของคุณไปกับคลังท่าโยคะพร้อมวิดีโอสาธิต</p>
+        </div>
+        <div class="instructional-grid">
+            <a href="../basic-poses.html" class="instructional-card" id="basic-card">
+                <div class="card-content">
+                    <span class="card-level">BASIC</span>
+                    <h3 class="card-title">ท่าโยคะพื้นฐาน</h3>
+                    <p class="card-description">สำหรับผู้เริ่มต้นและผู้ที่ต้องการทบทวนพื้นฐานให้แม่นยำ</p>
+                </div>
+            </a>
+
+            <a href="../advanced-poses.html" class="instructional-card" id="advanced-card">
+                <div class="card-content">
+                    <span class="card-level">ADVANCED</span>
+                    <h3 class="card-title">ท่าโยคะขั้นสูง</h3>
+                    <p class="card-description">สำหรับผู้ที่มีประสบการณ์และต้องการพัฒนาการฝึกไปอีกระดับ</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<script>
+    // ...
+</script>
+  ใหม่
+<script>
+    // ==================================================================
+    // ส่วนที่ 1: การจัดการส่วนกลางและฟังก์ชันที่เรียกใช้บ่อย
+    // ==================================================================
+
+    // --- การตั้งค่าสไลด์รูปภาพพื้นหลัง ---
+    const images = [
+        "url('yoga_wallpaper.png')",
+        "url('yoga_2.png')",
+        "url('yoga_1.png')",
+    ];
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        document.body.style.backgroundImage = images[index];
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showSlide(currentIndex);
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % images.length;
+        showSlide(currentIndex);
+    }
+    
+    // --- ฟังก์ชันสำหรับเริ่มนับถอยหลังเวลา Session ---
+    function startCountdownTimer(loginTimestamp) {
+        const timerElement = document.getElementById('session-timer');
+        if (!timerElement) return; // ออกถ้าไม่มี element นี้ในหน้า
+
+        const sessionDuration = 7200; // 1 ชั่วโมง = 3600 วินาที
+        const expirationTimestamp = loginTimestamp + sessionDuration;
+
+        const countdownInterval = setInterval(() => {
+            const now = Math.floor(Date.now() / 1000); // เวลาปัจจุบันในหน่วยวินาที
+            const remainingSeconds = expirationTimestamp - now;
+
+            if (remainingSeconds <= 0) {
+        clearInterval(countdownInterval); // หยุดนับเวลา
+        timerElement.textContent = "Expired"; // อาจเปลี่ยนข้อความเพื่อความชัดเจน
+
+        // --- ส่วนที่เพิ่มเข้ามา ---
+        alert("เซสชั่นหมดอายุ กรุณาเข้าสู่ระบบใหม่อีกครั้ง"); // แจ้งเตือนผู้ใช้
+        window.location.href = '/frontend-user/login/login.html'; // บังคับไปหน้า Login ทันที
+        return;
+    }
+
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+
+            timerElement.textContent = 
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    // --- ฟังก์ชันสำหรับโหลดและแสดงผลประวัติการฝึกซ้อม ---
+    function loadUserHistory() {
+        const historySection = document.getElementById('history-section');
+        const challengeSummaryList = document.getElementById('challenge-summary-list');
+        const poseProgressList = document.getElementById('pose-progress-list');
+
+        if (!historySection || !challengeSummaryList || !poseProgressList) return;
+
+        fetch('/smartyoga-api/get_user_history.php', { credentials: 'include' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.challenge_summary || data.pose_progress) {
+                    historySection.style.display = 'block';
+
+                    // แสดงผลสรุป Challenge
+                    if (data.challenge_summary && data.challenge_summary.length > 0) {
+                        challengeSummaryList.innerHTML = '';
+                        data.challenge_summary.forEach(summary => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `
+                                <strong>${summary.challenge_level.toUpperCase()} Challenge:</strong> 
+                                Passed <span>${summary.poses_passed} / ${summary.total_poses}</span> poses 
+                                on ${new Date(summary.played_at).toLocaleDateString('th-TH')}
+                            `;
+                            challengeSummaryList.appendChild(li);
+                        });
+                    } else {
+                        challengeSummaryList.innerHTML = '<li>ยังไม่มีประวัติการเล่น Challenge</li>';
+                    }
+
+                    // แสดงประวัติการฝึกรายท่า
+                    if (data.pose_progress && data.pose_progress.length > 0) {
+                        poseProgressList.innerHTML = '';
+                        data.pose_progress.forEach(progress => {
+                            const li = document.createElement('li');
+                            li.innerHTML = `
+                                <strong>${progress.pose_name}:</strong> 
+                                Result - <span>${progress.result}</span> 
+                                on ${new Date(progress.completed_at).toLocaleDateString('th-TH')}
+                            `;
+                            poseProgressList.appendChild(li);
+                        });
+                    } else {
+                        poseProgressList.innerHTML = '<li>ยังไม่มีประวัติการฝึกท่า</li>';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching user history:", error);
+                historySection.style.display = 'none';
+            });
+    }
+
+    // ==================================================================
+    // ส่วนที่ 2: การทำงานหลักเมื่อหน้าเว็บโหลดเสร็จ
+    // ==================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. เริ่มต้นการทำงานของสไลด์
+        showSlide(currentIndex);
+
+        // 2. ดึง Element ที่ต้องใช้มาเก็บในตัวแปร
+        const signupMenuItem = document.getElementById('signup-menu-item');
+        const userMenuItem = document.getElementById('user-menu-item');
+        const welcomeLink = document.getElementById('welcome-link');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // 3. ตรวจสอบสถานะการ Login และจัดการแสดงผลทั้งหมด
+        fetch('/smartyoga-api/check_session.php', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            // กรณีที่ 1: ยังไม่ได้ Login หรือ Session หมดอายุ
+            if (!data.isLoggedIn) {
+                alert('กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน');
+                window.location.href = '/frontend-user/login/login.html'; // ** แก้ไข path ไปยังหน้า Login ของคุณให้ถูกต้อง **
+            } 
+            // กรณีที่ 2: Login อยู่
+            else {
+                // อัปเดตเมนู
+                welcomeLink.textContent = 'Edit Profile, ' + data.user.username;
+                signupMenuItem.style.display = 'none';
+                userMenuItem.style.display = 'flex';
+                userMenuItem.style.alignItems = 'center';
+                userMenuItem.style.gap = '15px';
+
+                // เริ่มนับถอยหลัง
+                if (data.login_time) {
+                    startCountdownTimer(data.login_time);
+                }
+
+                // โหลดประวัติผู้ใช้
+                loadUserHistory();
+            }
+        })
+        .catch(error => {
+            console.error('Error checking session:', error);
+            alert('ไม่สามารถตรวจสอบเซสชั่นได้ กรุณาลองอีกครั้ง');
+            window.location.href = '/frontend-user/login/login.html';
+        });
+
+        // 4. จัดการปุ่ม Logout
+        logoutBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+            .then(() => {
+                alert('คุณออกจากระบบแล้ว');
+                window.location.reload();
+            });
+        });
+    });
+</script>
+</body>
+</html>
+welcome

@@ -1,0 +1,169 @@
+/* instructional-style.css */
+
+/* --- General Style & Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #1a1a1a;
+    --sidebar-color: #111111;
+    --container-bg: #222222;
+    --primary-text: #ffffff;
+    --secondary-text: #ffffff;
+    --accent-color: #ffffff;
+    --border-color: #ffffff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
+    line-height: 1.6;
+}
+
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+.page-header {
+    text-align: center;
+    margin-bottom: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.page-header h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: var(--secondary-text);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.pose-card {
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pose-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+.pose-video-wrapper {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+    background-color: #000;
+}
+
+.pose-video-wrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pose-content {
+    padding: 25px;
+}
+
+.pose-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.pose-section-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.pose-section-title.benefits {
+    color: var(--success-color);
+}
+
+.pose-section-title.risks {
+    color: var(--danger-color);
+}
+
+.pose-section-title span {
+    margin-right: 10px;
+    font-size: 1.5rem;
+}
+
+.pose-list {
+    list-style: none;
+    padding-left: 5px;
+    color: var(--secondary-text);
+}
+
+.pose-list li {
+    margin-bottom: 8px;
+    padding-left: 15px;
+    position: relative;
+}
+
+.pose-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+}
+
+.page-navigation {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.nav-button {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--accent-color);
+    color: #111;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+.nav-button:hover {
+    background-color: #dfcba8;
+}
+

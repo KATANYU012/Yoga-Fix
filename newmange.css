@@ -1,0 +1,218 @@
+/* --- General Style & Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #1a1a1a;
+    --sidebar-color: #111111;
+    --container-bg: #222222;
+    --primary-text: #ffffff;
+    --secondary-text: #a0a0a0;
+    --accent-color: #c5a878;
+    --border-color: #333333;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --info-color: #007bff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
+    display: flex;
+}
+
+/* --- Layout --- */
+.admin-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* --- Sidebar Navigation --- */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--accent-color);
+    font-size: 1.8rem;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav ul li a {
+    display: block;
+    color: var(--secondary-text);
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-nav ul li a:hover,
+.sidebar-nav ul li a.active {
+    background-color: var(--border-color);
+    color: var(--primary-text);
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.main-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+}
+
+.add-new-btn {
+    background-color: var(--accent-color);
+    color: #111;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.add-new-btn:hover {
+    background-color: #dfcba8;
+}
+
+/* --- Data Table --- */
+.data-table-container {
+    background-color: var(--container-bg);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.data-table-container h2 {
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+thead th {
+    background-color: #333;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+tbody td {
+    color: var(--secondary-text);
+}
+
+tbody td:first-child {
+    color: var(--primary-text);
+    font-weight: bold;
+}
+
+/* --- Action Buttons --- */
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 0.9rem;
+}
+
+.edit-btn { background-color: var(--info-color); }
+.delete-btn { background-color: var(--danger-color); }
+.block-btn { background-color: #ffc107; color: #111; }
+
+/* --- Status Badge --- */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+}
+.status-active { background-color: var(--success-color); }
+.status-blocked { background-color: var(--danger-color); }
+
+/* --- Form Styles (for add/edit pages) --- */
+.form-container {
+    background-color: var(--container-bg);
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--secondary-text);
+    margin-bottom: 8px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container textarea,
+.form-container select {
+    width: 100%;
+    padding: 12px;
+    background-color: #333;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--primary-text);
+    font-size: 1rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.form-container textarea {
+    min-height: 200px;
+    resize: vertical;
+}

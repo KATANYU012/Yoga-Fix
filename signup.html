@@ -1,0 +1,55 @@
+<html lang="en">
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | SmartYoga AI</title>
+  <link rel="stylesheet" href="signup.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Prompt&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-overlay">
+    <div class="signup-box">
+    <a href="../page/page1.html">
+      <img src="LOGO.png" alt="YOGA Logo" class="form-logo">
+    </a>
+      <h1>Sign Up</h1>
+      <p class="subtitle">Start your path with SmartYoga AI</p>
+      <form id="signupForm" onsubmit="return validateForm()">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter your username" required>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="text" id="password" placeholder="Enter password" required>
+
+        <label>Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+          <span id="toggleConfirm" class="toggle-icon" title="แสดง/ซ่อนรหัสผ่าน">⦾</span>
+        </div>
+        
+        <label>Gender</label>
+        <select id="gender">
+          <option value="">-- Select Gender --</option>
+          <option>ชาย</option>
+          <option>หญิง</option>
+          <option>อื่นๆ</option>
+        </select>
+
+        <label>Birthdate</label>
+        <input type="date" id="birthdate" required>
+
+        <div class="btn-row">
+          <button type="submit" class="submit-btn"onclick="goToSignUp()">Sign UP</button>
+          <button type="reset" class="reset-btn"onclick="goToLogin()">Log In</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="signup.js">
+  </script>
+</body>
+</html>

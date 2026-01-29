@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Yoga Poses | SmartYoga AI</title>
+    <link rel="stylesheet" href="page/page1.css"> 
+    <link rel="stylesheet" href="poses.css">
+    <link rel="stylesheet" href="navbar-style.css"> 
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="nav-con">
+                <div class="logo">
+                    <a href="/frontend-user/page/page1.html"><img src="LOGO.png" alt="YOGA Logo" style="height: 60px;"></a>
+                </div>
+                <ul class="menu">
+                    <li><a href="/frontend-user/page/page1.html">HOME</a></li>
+                    <li><a href="/frontend-user/tutorial.html">TUTORIAL</a></li>
+                    <li><a href="/frontend-user/news.html">NEWS</a></li>
+                    <li><a href="/frontend-user/poses.html" class="active">POSES</a></li>
+                    <li id="user-menu-item" style="display: none;">
+                        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="poses-container">
+        <div class="poses-grid" id="poses-grid">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const posesGrid = document.getElementById('poses-grid');
+
+            // --- จัดการเมนู Login/Logout (เหมือนหน้าอื่นๆ) ---
+            const signupMenuItem = document.getElementById('signup-menu-item');
+            const loginMenuItem = document.getElementById('login-menu-item');
+            const userMenuItem = document.getElementById('user-menu-item');
+            const welcomeLink = document.getElementById('welcome-link');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isLoggedIn) {
+                        welcomeLink.textContent = 'Welcome, ' + data.user.username;
+                        signupMenuItem.style.display = 'none';
+                        loginMenuItem.style.display = 'none';
+                        userMenuItem.style.display = 'flex';
+                    } else {
+                        signupMenuItem.style.display = 'list-item';
+                        loginMenuItem.style.display = 'list-item';
+                        userMenuItem.style.display = 'none';
+                    }
+                });
+
+            logoutBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+                    .then(() => {
+                        alert('คุณออกจากระบบแล้ว');
+                        window.location.reload();
+                    });
+            });
+
+
+            // --- โหลดท่าโยคะมาแสดงผล ---
+            fetch('/smartyoga-api/get_media.php', { credentials: 'include' })
+                .then(response => response.json())
+                .then(poses => {
+                    if (poses.length === 0) {
+                        posesGrid.innerHTML = '<p style="text-align:center;">ไม่พบข้อมูลท่าโยคะ</p>';
+                        return;
+                    }
+
+                    poses.forEach(pose => {
+                        const imageUrl = `/smartyoga-api/${pose.file_path}`;
+                        
+                        const card = document.createElement('div');
+                        card.className = 'pose-card';
+                        card.innerHTML = `
+                            <img src="${imageUrl}" alt="${pose.title}">
+                            <div class="pose-card-content">
+                                <span class="level-badge">${pose.level}</span>
+                                <h2>${pose.title}</h2>
+                                <p>${pose.description}</p>
+                        `;
+                        posesGrid.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching poses:', error);
+                    posesGrid.innerHTML = '<p style="text-align:center; color: tomato;">เกิดข้อผิดพลาดในการโหลดข้อมูล</p>';
+                });
+        });
+    </script>
+</body>
+</html>

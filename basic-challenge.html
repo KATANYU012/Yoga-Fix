@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Yoga Challenge | SmartYoga AI</title>
+    <link rel="stylesheet" href="challenge-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="challenge-wrapper" id="training-screen">
+        <div class="top-bar">
+            <h1 id="challenge-title">Basic Challenge</h1>
+            <div id="stage-counter" class="stage-counter">Stage 1 / 10</div>
+        </div>
+        <div class="main-content">
+            <div class="reference-panel">
+                <h2 id="pose-title">Pose Name</h2>
+                <img src="" id="reference-image" class="reference-image" alt="Reference Pose">
+            </div>
+            <div class="trainer-panel">
+                <div class="container">
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="output_canvas" width="800" height="600"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-bar">
+            <div class="progress-circle" id="accuracy-circle">
+                <span id="accuracy-percent">0%</span>
+            </div>
+            <div id="feedback-status" class="status-text">-</div>
+            <button id="skip-btn" class="skip-btn">Skip Pose</button>
+        </div>
+    </div>
+
+    <div id="summary-screen" class="summary-screen">
+        <div class="summary-box">
+            <h1>Challenge Complete!</h1>
+            <p id="summary-score">You passed 0 / 10 poses.</p>
+            <a href="../frontend-user/page/page1.html">กลับหน้าหลัก</a>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- 1. การตั้งค่าตัวแปร ---
+        const ui = {
+            challengeTitle: document.getElementById('challenge-title'),
+            stageCounter: document.getElementById('stage-counter'),
+            poseTitle: document.getElementById('pose-title'),
+            referenceImage: document.getElementById('reference-image'),
+            feedbackStatus: document.getElementById('feedback-status'),
+            accuracyCircle: document.getElementById('accuracy-circle'),
+            accuracyPercent: document.getElementById('accuracy-percent'),
+            skipBtn: document.getElementById('skip-btn'),
+            trainingScreen: document.getElementById('training-screen'),
+            summaryScreen: document.getElementById('summary-screen'),
+            summaryScore: document.getElementById('summary-score'),
+            webcam: document.getElementById('webcam'),
+            canvas: document.getElementById('output_canvas')
+        };
+        const canvasCtx = ui.canvas.getContext('2d');
+        
+        let masterPoseData, poseChallengeList = [], currentStage = 0, posesPassed = 0;
+        let correctPoseTimer = null, isPoseSaved = false;
+        const POSE_HOLD_DURATION = 3000, ACCURACY_THRESHOLD = 90;
+
+        // --- 2. ฟังก์ชัน onResults และการคำนวณ ---
+        function calculateAngle(p1, p2, p3) {
+            const angle = Math.atan2(p3.y - p2.y, p3.x - p2.x) - Math.atan2(p1.y - p2.y, p1.x - p2.x);
+            let degrees = Math.abs(angle * 180.0 / Math.PI);
+            return degrees > 180.0 ? 360 - degrees : degrees;
+        }
+
+        function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+            if (results.poseLandmarks) {
+                // คำสั่งวาดโครงกระดูกที่ถูกต้อง
+                drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, { color: '#c5a878', lineWidth: 3 });
+                drawLandmarks(canvasCtx, results.poseLandmarks, { color: '#f0f0f0', lineWidth: 1, radius: 3 });
+            }
+
+            if (results.poseLandmarks && masterPoseData && poseChallengeList.length > 0 && currentStage < poseChallengeList.length) {
+                // แก้ไข: ดึงชื่อท่าจาก .title
+                const currentPoseName = poseChallengeList[currentStage].title;
+                
+                if (!masterPoseData[currentPoseName]) {
+                    console.error(`ไม่พบข้อมูลพิมพ์เขียวสำหรับท่า: ${currentPoseName}`);
+                    canvasCtx.restore();
+                    return; 
+                }
+
+                const targetAngles = masterPoseData[currentPoseName].angles;
+                const landmarks = results.poseLandmarks;
+                const landmarkMap = { shoulder: 11, elbow: 13, wrist: 15, hip: 23, knee: 25, ankle: 27 };
+
+                let correctAnglesCount = 0;
+                let totalAnglesCount = 0;
+
+                for (const angleName in targetAngles) {
+                    totalAnglesCount++;
+                    const angleInfo = targetAngles[angleName];
+                    let isAnySideCorrect = false;
+
+                    ['left_', 'right_'].forEach(side => {
+                        const p1 = landmarks[landmarkMap[angleInfo.p1] + (side === 'right_' ? 1 : 0)];
+                        const p2 = landmarks[landmarkMap[angleInfo.p2] + (side === 'right_' ? 1 : 0)];
+                        const p3 = landmarks[landmarkMap[angleInfo.p3] + (side === 'right_' ? 1 : 0)];
+
+                        if(p1 && p2 && p3 && !isAnySideCorrect) {
+                            const userAngle = calculateAngle(p1, p2, p3);
+                            if (userAngle >= angleInfo.min && userAngle <= angleInfo.max) {
+                                isAnySideCorrect = true;
+                            }
+                        }
+                    });
+                    if (isAnySideCorrect) correctAnglesCount++;
+                }
+
+                const accuracyPercentage = totalAnglesCount > 0 ? (correctAnglesCount / totalAnglesCount) * 100 : 0;
+                ui.accuracyCircle.style.setProperty('--p', accuracyPercentage);
+                ui.accuracyPercent.textContent = `${accuracyPercentage.toFixed(0)}%`;
+
+                const isPoseCorrectOverall = accuracyPercentage >= ACCURACY_THRESHOLD;
+
+                if (!isPoseSaved) {
+                    if (isPoseCorrectOverall) {
+                        ui.feedbackStatus.style.color = 'var(--success, lightgreen)';
+                        if (!correctPoseTimer) {
+                            ui.feedbackStatus.textContent = 'HOLD...';
+                            correctPoseTimer = setTimeout(() => {
+                                ui.feedbackStatus.textContent = 'PASSED!';
+                                isPoseSaved = true;
+                                posesPassed++;
+                                saveResultToDatabase(currentPoseName, 'correct');
+                                setTimeout(() => setupStage(currentStage + 1), 2000);
+                            }, POSE_HOLD_DURATION);
+                        }
+                    } else {
+                        ui.feedbackStatus.textContent = 'INCORRECT';
+                        ui.feedbackStatus.style.color = 'var(--danger, tomato)';
+                        clearTimeout(correctPoseTimer);
+                        correctPoseTimer = null;
+                    }
+                }
+            }
+            canvasCtx.restore();
+        }
+
+        // --- 3. ฟังก์ชันจัดการเกม ---
+        function setupStage(stageIndex) {
+            if (stageIndex >= poseChallengeList.length) {
+                showSummary();
+                return;
+            }
+            currentStage = stageIndex;
+            isPoseSaved = false;
+            clearTimeout(correctPoseTimer);
+            correctPoseTimer = null;
+
+            const currentPose = poseChallengeList[currentStage];
+            ui.stageCounter.textContent = `Stage ${currentStage + 1} / ${poseChallengeList.length}`;
+            ui.poseTitle.textContent = currentPose.title;
+            // แก้ไข: path รูปภาพสำหรับ XAMPP (ต้องมั่นใจว่ามีรูปใน smartyoga-api/uploads)
+            ui.referenceImage.src = `/smartyoga-api/${currentPose.file_path}`;
+            ui.feedbackStatus.textContent = '-';
+            ui.accuracyPercent.textContent = '0%';
+            ui.accuracyCircle.style.setProperty('--p', 0);
+            ui.feedbackStatus.style.color = 'white';
+        }
+
+        function skipStage() {
+            if (currentStage < poseChallengeList.length) {
+                saveResultToDatabase(poseChallengeList[currentStage].title, 'skipped');
+                setupStage(currentStage + 1);
+            }
+        }
+        function showSummary() {
+            ui.trainingScreen.style.display = 'none';
+            ui.summaryScreen.style.display = 'flex';
+            ui.summaryScore.textContent = `You passed ${posesPassed} / ${poseChallengeList.length} poses.`;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const level = urlParams.get('level') || 'basic';
+
+            const summaryData = {
+                level: level,
+                posesPassed: posesPassed,
+                totalPoses: poseChallengeList.length
+            };
+
+            fetch('/smartyoga-api/save_challenge_summary.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(summaryData),
+                credentials: 'include'
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Summary Save Response:', data.message);
+            })
+            .catch(error => {
+                console.error('Error saving summary:', error);
+            });
+        }
+        function saveResultToDatabase(poseName, result) {
+            fetch('/smartyoga-api/save_progress.php', {
+                method: 'POST', body: JSON.stringify({ pose_name: poseName, result: result }),
+                headers: { 'Content-Type': 'application/json' }, credentials: 'include'
+            }).then(res => res.json()).then(data => console.log(data.message));
+        }
+
+        // --- 4. เริ่มต้น Challenge ---
+        function initializeTrainer() {
+            const pose = new Pose({ locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}` });
+            pose.setOptions({ modelComplexity: 1, smoothLandmarks: true, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+            pose.onResults(onResults);
+
+            const camera = new Camera(ui.webcam, {
+                onFrame: async () => { await pose.send({ image: ui.webcam }); },
+                width: 800, height: 600
+            });
+            camera.start();
+        }
+
+        async function startChallenge() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const level = urlParams.get('level') || 'basic';
+            
+            ui.challengeTitle.textContent = `${level.charAt(0).toUpperCase() + level.slice(1)} Challenge`;
+
+            try {
+                const poseDataResponse = await fetch('/frontend-user/poses_data.json');
+                masterPoseData = await poseDataResponse.json();
+                
+                const challengeListResponse = await fetch(`/smartyoga-api/get_${level}_poses.php`);
+                poseChallengeList = await challengeListResponse.json();
+
+                if (poseChallengeList.length > 0) {
+                    setupStage(0);
+                    initializeTrainer();
+                } else {
+                    ui.poseTitle.textContent = "Error: Could not load poses.";
+                }
+            } catch (error) {
+                console.error("Failed to start challenge:", error);
+                ui.poseTitle.textContent = "Error starting challenge.";
+            }
+        }
+        
+        ui.skipBtn.addEventListener('click', skipStage);
+        startChallenge();
+    </script>
+</body>
+</html>

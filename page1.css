@@ -1,0 +1,623 @@
+*{
+    margin: 0;
+    padding: 0%;
+    box-sizing: border-box;
+  }
+  .container{
+    max-width: 1140;
+    margin: 0 auto;
+  }
+  
+  nav{
+    padding: 1rem;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0 2px 8px rgba(156, 8, 255, 0.2);
+  }
+  
+  .nav.con {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo a{
+    font-size: 2rem;
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .menu {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin-left: auto; /* บังคับให้เมนูไปอยู่ด้านขวา */
+  }
+  
+  .menu li{
+    margin: 0 1rem;
+  }
+  
+  .menu li a{
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url("images/yoga-bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #000000;
+  }
+  
+  header {
+    background-color: rgba(162, 156, 167, 0.85);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(156, 8, 255, 0.2);
+  }
+  
+  .content {
+    background-color: rgba(211, 227, 245, 0.85);
+    margin: 40px auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(156, 8, 255, 0.2);
+  }
+  
+  ul {
+    list-style: circle;
+    padding-left: 20px;
+    text-align: left;
+  }
+  
+  .login-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    color: rgb(250, 250, 250);
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .login-button:hover {
+    background-color: #45a049;
+  }
+  
+  /*CSS TEMPLEAT หน้าแรก */
+  * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+  
+      .header h1 {
+          font-size: 4.5rem;
+          font-weight: 500;
+          line-height: 1.2;
+      }   
+  
+      body {
+        font-family: 'Playfair Display', serif;
+        background-image: url("yoga_wallpaper.png"); 
+        background-size: cover;
+        background-position: center;
+        color: white;
+      }
+      .top-bar {
+        background: rgba(0,0,0,0.9);
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
+      .top-bar div {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .header {
+        text-align: center;
+        padding: 100px 20px;
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+      .header h1 {
+        font-size: 4rem;
+        margin-bottom: 10px;
+      }
+      .header p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+      }
+      .btn {
+          padding: 12px 30px;
+          background-color: transparent;
+          border: 2px solid #d6ad60;
+          color: #d6ad60;
+          font-weight: bold;
+          cursor: pointer;
+          text-transform: uppercase;
+      }   
+      .find-table-btn {
+        position: absolute;
+        top: 20%;
+        right: 5%;
+        padding: 12px 25px;
+        background-color: #e3c48f;
+        color: black;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+      }
+
+      .nav-arrows {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 30px;
+      }
+      .nav-arrows span {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        cursor: pointer;
+      }
+      .item-grid {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    
+    .item-card {
+        text-align: center;
+        flex-basis: 320px;
+    }
+    
+    /* ทำให้การ์ดอันกลางอยู่ต่ำกว่าเพื่อน */
+    .item-card:nth-child(2) {
+        margin-top: 50px;
+    }
+    
+    .item-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.8rem;
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+    
+    .item-card .view-link {
+        color: #c5a878;
+        text-decoration: none;
+        font-size: 0.8rem;
+        letter-spacing: 1.5px;
+        font-weight: bold;
+    }
+    
+    /* รูปภาพและขอบตกแต่ง */
+    .image-container {
+        position: relative;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .image-container img {
+        width: 100%;
+        display: block;
+        border: 3px solid #444;
+    }
+    
+    .image-container::before,
+    .image-container::after {
+        content: '⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩';
+        display: block;
+        color: #c5a878;
+        font-size: 20px;
+        text-align: center;
+        line-height: 0.8;
+        padding: 10px ;
+    }
+    /* ========== สไตล์สำหรับ SECTION เรื่องราวของเรา ========== */
+.story-section {
+  padding: 100px ;
+  background-color: #1a1a1a; /* ทำให้พื้นหลังเป็นสีเดียวกับส่วนอื่นๆ */
+}
+
+/* กริดสำหรับจัดวาง 2 คอลัมน์ */
+.story-grid {
+  display: flex;
+  align-items: center; /* ทำให้เนื้อหาแนวตั้งอยู่กึ่งกลาง */
+  justify-content: center;
+  gap: 4rem; /* ระยะห่างระหว่างคอลัมน์ */
+  flex-wrap: wrap; /* ทำให้ขึ้นบรรทัดใหม่เมื่อจอแคบ */
+}
+
+/* ขนาดของแต่ละคอลัมน์ */
+.story-text, .story-image-wrapper {
+  flex: 1; /* ให้แต่ละคอลัมน์แบ่งพื้นที่เท่าๆ กัน */
+  min-width: 320px; /* ความกว้างขั้นต่ำ */
+}
+
+/* สไตล์ฝั่งข้อความ */
+.story-text .subtitle {
+  color: #c5a878;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.story-text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.story-text .description {
+  color: #cccccc;
+  line-height: 2;
+  margin-bottom: 0 auto;
+  max-width: 700px;
+}
+
+.call-info {
+  margin-bottom: 30px;
+}
+
+.read-more-btn {
+  display: inline-block;
+  color: #c5a878;
+  border: 2px solid #555;
+  padding: 12px 25px;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+  background-color: #c5a878;
+  color: #1a1a1a;
+  border-color: #c5a878;
+}
+
+/* สไตล์ฝั่งรูปภาพ */
+.story-image-wrapper {
+  position: relative; /* สำคัญมากสำหรับการจัดวางองค์ประกอบลูก */
+}
+
+.story-image-wrapper img {
+  width: 100%;
+  display: block;
+  border-radius: 5%;
+}
+
+/* ตราสัญลักษณ์มุมขวาบน */
+.since-badge {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+  color: #1a1a1a;
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  border: 5px solid #1a1a1a;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.since-badge .since-text {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.since-badge .since-year {
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+/* ลายตกแต่งด้านล่างรูป */
+.decorative-pattern {
+  content: '⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩⬪⬩';
+  display: block;
+  color: #c5a878;
+  font-size: 20px;
+  text-align: center;
+  line-height: 0.8;
+  padding: 15px 0;
+  background-color: #222;
+  margin-top: -5px; /* ทำให้ต่อกับรูปพอดี */
+}
+/* ========== สไตล์สำหรับ SECTION ท่าฝึกแนะนำ ========== */
+.featured-item-section {
+    padding: 100px 0;
+    /* ใช้สีพื้นหลังจาก body */
+}
+
+/* กริดสำหรับจัดวาง 2 คอลัมน์ (สลับข้าง) */
+.item-grid-reversed {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+/* สลับลำดับคอลัมน์เมื่อหน้าจอใหญ่ */
+.item-grid-reversed .item-image {
+    order: 1; /* กำหนดให้เป็นลำดับที่ 1 */
+    flex: 1.2; /* ให้พื้นที่รูปภาพเยอะกว่าเล็กน้อย */
+    min-width: 320px;
+}
+
+.item-grid-reversed .item-details {
+    order: 2; /* กำหนดให้เป็นลำดับที่ 2 */
+    flex: 1;
+    min-width: 320px;
+}
+
+.item-image img {
+    width: 100%;
+    display: block;
+    align-items: center;
+    border-radius: 10px; /* ทำให้มุมมนเล็กน้อย */
+}
+
+/* สไตล์ฝั่งรายละเอียด */
+.item-details .subtitle {
+    color: #c5a878;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-details .subtitle .icon {
+    font-size: 1.2rem;
+}
+
+.item-details h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.item-details .description {
+    color: #cccccc;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.item-details .attribute {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #c5a878;
+    margin-bottom: 30px;
+}
+
+.view-all-btn {
+    display: inline-block;
+    color: #c5a878;
+    border: 2px solid #555;
+    padding: 12px 25px;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background-color: #c5a878;
+    color: #1a1a1a;
+    border-color: #c5a878;
+}
+
+/* ทำให้ responsive: เมื่อจอแคบ ให้รูปอยู่บน ข้อความอยู่ล่าง */
+@media (max-width: 992px) {
+    .item-grid-reversed .item-image,
+    .item-grid-reversed .item-details {
+        order: 0; /* ยกเลิกการสลับลำดับ */
+        flex-basis: 100%; /* ทำให้เต็มความกว้าง */
+    }
+}
+.history-section {
+    padding: 60px 20px;
+    background-color: #222;
+}
+.history-section h2 {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    color: #c5a878;
+    margin-bottom: 40px;
+}
+.history-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.challenge-history h3, .pose-history h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.challenge-history ul, .pose-history ul {
+    list-style: none;
+    padding: 0;
+}
+.challenge-history li, .pose-history li {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #a0a0a0;
+}
+.challenge-history li span, .pose-history li span {
+    color: #f0f0f0;
+    font-weight: bold;
+}
+
+/* ================================================== */
+/* CSS สำหรับ Section เรียนรู้ท่าโยคะ (เพิ่มตรงนี้)      */
+/* ================================================== */
+
+.instructional-section {
+    padding: 80px 0;
+    background-color: #1c1c1c; /* สีพื้นหลังเข้มกว่าเดิมเล็กน้อยเพื่อแยกส่วน */
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.instructional-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.instructional-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* ดันข้อความไปไว้ด้านล่าง */
+    min-height: 450px;
+    padding: 30px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: #ffffff;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ใส่ Overlay สีเข้มเพื่อให้ข้อความอ่านง่ายขึ้น */
+.instructional-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 20%, rgba(0,0,0,0.1) 100%);
+    z-index: 1;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    transform: translateY(20px); /* ซ่อนไว้เล็กน้อยตอนแรก */
+    transition: transform 0.4s ease;
+}
+
+.instructional-card:hover {
+    transform: scale(1.03); /* เอฟเฟกต์ขยายเมื่อเมาส์ชี้ */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.instructional-card:hover .card-content {
+    transform: translateY(0); /* ขยับข้อความขึ้นเมื่อเมาส์ชี้ */
+}
+
+.card-level {
+    display: inline-block;
+    background-color: rgba(227, 196, 143, 0.2); /* สี accent แบบโปร่งใส */
+    color: #e3c48f;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    font-size: 1rem;
+    color: #c0c0c0;
+    opacity: 0; /* ซ่อนไว้ตอนแรก */
+    transition: opacity 0.4s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.instructional-card:hover .card-description {
+    opacity: 1; /* แสดงคำอธิบายเมื่อเมาส์ชี้ */
+    max-height: 100px; /* ขยายพื้นที่ให้พอดี */
+}
+
+.card-cta {
+    display: inline-block;
+    margin-top: 20px;
+    color: #e3c48f;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transform: translateY(10px);
+}
+
+.instructional-card:hover .card-cta {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- รูปภาพพื้นหลังของการ์ดแต่ละใบ --- */
+/* 💡 แนะนำ: หารูปสวยๆ มาใส่แทนได้เลยครับ */
+#basic-card {
+    background-image: url('basic.png'); /* รูปภาพสำหรับ Basic */
+}
+
+#advanced-card {
+    background-image: url('addvance.png'); /* รูปภาพสำหรับ Advanced */
+}
+

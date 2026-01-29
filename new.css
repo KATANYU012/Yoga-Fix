@@ -1,0 +1,143 @@
+/* --- General Style & Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&display=swap');
+
+:root {
+    --bg-color: #1a1a1a;
+    --primary-text: #f0f0f0;
+    --secondary-text: #a0a0a0;
+    --accent-color: #c5a878;
+    --border-color: #333333;
+    --container-bg: #222;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--primary-text);
+    margin: 0;
+}
+
+/* --- Top Bar (เพื่อให้ Consistent กับหน้าอื่น) --- */
+.top-bar { /* ... คัดลอกสไตล์ Top Bar จาก page1.css มาวางที่นี่ ... */ }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+
+/* --- Hero Section --- */
+.hero-section {
+    height: 45vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://source.unsplash.com/1600x900/?yoga,calm') center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+}
+
+.hero-section .subtitle {
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+}
+
+.hero-section h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    margin: 10px 0 0 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* --- News Layout --- */
+.news-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 คอลัมน์สำหรับบทความทั้งหมด */
+    gap: 40px;
+    padding: 60px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.news-card {
+    background-color: var(--container-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+.article-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.article-body {
+    padding: 30px;
+}
+
+.article-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    color: var(--primary-text);
+}
+
+.article-meta {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin-bottom: 20px;
+}
+
+.article-meta .author {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.article-content {
+    color: var(--secondary-text);
+    line-height: 1.8;
+    white-space: pre-wrap; /* ทำให้การขึ้นบรรทัดใหม่แสดงผลถูกต้อง */
+}
+
+/* --- Featured Article (บทความแรกสุด) --- */
+.news-card:first-child {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* แบ่ง 2 คอลัมน์ */
+    gap: 0;
+}
+.news-card:first-child .article-image {
+    grid-column: 2; /* สลับให้รูปอยู่ขวา */
+    grid-row: 1;
+}
+.news-card:first-child .article-image img {
+    height: 100%;
+}
+.news-card:first-child .article-body {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.news-card:first-child .article-title {
+    font-size: 2.8rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .news-card:first-child {
+        grid-template-columns: 1fr; /* กลับเป็น 1 คอลัมน์บนมือถือ */
+    }
+    .news-card:first-child .article-image {
+        grid-column: 1;
+    }
+    .hero-section h1 { font-size: 2.5rem; }
+    .article-title { font-size: 1.8rem; }
+}

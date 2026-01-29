@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>News | SmartYoga AI</title>
+    <link rel="stylesheet" href="page/page1.css">
+    <link rel="stylesheet" href="new.css">
+    <link rel="stylesheet" href="navbar-style.css">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="container">
+            <div class="nav-con">
+                <div class="logo">
+                    <a href="/frontend-user/page/page1.html"><img src="LOGO.png" alt="YOGA Logo" style="height: 60px;"></a>
+                </div>
+                <ul class="menu">
+                    <li><a href="/frontend-user/page/page1.html">HOME</a></li>
+                    <li><a href="/frontend-user/tutorial.html">TUTORIAL</a></li>
+                    <li><a href="/frontend-user/news.html" class="active">NEWS</a></li>
+                    <li><a href="/frontend-user/poses.html">POSES</a></li>
+                    <li id="user-menu-item" style="display: none;">
+                        <a href="/frontend-user/profile.html" id="welcome-link"></a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <header class="hero-section">
+        <p class="subtitle">SmartYoga AI</p>
+        <h1>News & Insights</h1>
+    </header>
+
+    <main class="news-grid" id="news-articles-container">
+        </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsContainer = document.getElementById('news-articles-container');
+            const signupMenuItem = document.getElementById('signup-menu-item');
+            const loginMenuItem = document.getElementById('login-menu-item');
+            const userMenuItem = document.getElementById('user-menu-item');
+            const welcomeLink = document.getElementById('welcome-link');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // --- จัดการเมนู Login/Logout ---
+            fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isLoggedIn) {
+                        welcomeLink.textContent = 'Welcome, ' + data.user.username;
+                        signupMenuItem.style.display = 'none';
+                        loginMenuItem.style.display = 'none';
+                        userMenuItem.style.display = 'flex';
+                    } else {
+                        signupMenuItem.style.display = 'list-item';
+                        loginMenuItem.style.display = 'list-item';
+                        userMenuItem.style.display = 'none';
+                    }
+                });
+
+            logoutBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+                    .then(() => {
+                        alert('คุณออกจากระบบแล้ว');
+                        window.location.reload();
+                    });
+            });
+
+            // --- โหลดข่าวสารมาแสดงผล ---
+            fetch('/smartyoga-api/get_all_news.php')
+                .then(response => response.json())
+                .then(newsItems => {
+                    if (newsItems.length === 0) {
+                        newsContainer.innerHTML = '<p style="text-align: center;">ยังไม่มีข่าวสารในขณะนี้</p>';
+                        return;
+                    }
+
+                    newsItems.forEach(item => {
+                        const article = document.createElement('article');
+                        article.className = 'news-card';
+                        const formattedDate = new Date(item.created_at).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+                        const imageUrl = item.image_path ? `/smartyoga-api/${item.image_path}` : `https://source.unsplash.com/800x400/?yoga,meditation,${item.title.split(' ')[0]}`;
+
+                        article.innerHTML = `
+                            <div class="article-image">
+                                <img src="${imageUrl}" alt="${item.title}">
+                            </div>
+                            <div class="article-body">
+                                <h2 class="article-title">${item.title}</h2>
+                                <p class="article-meta">
+                                    By <span class="author">${item.author_name}</span> | ${formattedDate}
+                                </p>
+                                <div class="article-content">${item.content.substring(0, 200)}...</div>
+                            </div>
+                        `;
+                        newsContainer.appendChild(article);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching news:', error);
+                    newsContainer.innerHTML = '<p style="text-align: center; color: tomato;">เกิดข้อผิดพลาดในการโหลดข่าวสาร</p>';
+                });
+        });
+    </script>
+</body>
+</html>

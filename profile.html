@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>โปรไฟล์ของฉัน</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <div class="profile-container">
+        <aside class="profile-sidebar">
+            <h2 id="username-display">Loading...</h2>
+            <p class="sidebar-role">Member</p>
+            <a href="../frontend-user/page/page1.html" class="sidebar-link">← กลับหน้าหลัก</a>
+        </aside>
+        <main class="profile-main">
+            <form id="profileForm">
+                <h2>Edit Profile</h2>
+                <div class="form-group">
+                    <label for="username">ชื่อผู้ใช้</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">อีเมล</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthdate">วันเกิด</label>
+                    <input type="date" id="birthdate" required>
+                </div>
+                <p id="profile-status" class="status-message"></p>
+                <button type="submit">บันทึกข้อมูลส่วนตัว</button>
+            </form>
+
+            <form id="passwordForm" style="margin-top: 40px;">
+                <h2>เปลี่ยนรหัสผ่าน</h2>
+                <div class="form-group">
+                    <label for="current-password">รหัสผ่านปัจจุบัน</label>
+                    <input type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">รหัสผ่านใหม่</label>
+                    <input type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">ยืนยันรหัสผ่านใหม่</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                <p id="password-status" class="status-message"></p>
+                <button type="submit">เปลี่ยนรหัสผ่าน</button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameDisplay = document.getElementById('username-display');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const birthdateInput = document.getElementById('birthdate');
+
+            // ดึงข้อมูลโปรไฟล์มาแสดง
+            fetch('/smartyoga-api/get_profile.php', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.username) {
+                        usernameDisplay.textContent = data.username;
+                        usernameInput.value = data.username;
+                        emailInput.value = data.email;
+                        birthdateInput.value = data.birthdate;
+                    } else {
+                        window.location.href = '/frontend-user/login.html';
+                    }
+                });
+
+            // จัดการฟอร์มแก้ไขโปรไฟล์
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const statusEl = document.getElementById('profile-status');
+                const updatedData = {
+                    username: usernameInput.value,
+                    email: emailInput.value,
+                    birthdate: birthdateInput.value,
+                    gender: 'ชาย' // สามารถเพิ่มฟิลด์ gender ได้ถ้าต้องการ
+                };
+                fetch('/smartyoga-api/update_profile.php', {
+                    method: 'POST', body: JSON.stringify(updatedData), 
+                    headers: { 'Content-Type': 'application/json' }, credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    statusEl.style.color = data.message.includes('สำเร็จ') ? 'var(--success-color)' : 'var(--error-color)';
+                    statusEl.textContent = data.message;
+                    if(data.message.includes('สำเร็จ')) {
+                        usernameDisplay.textContent = updatedData.username;
+                    }
+                });
+            });
+
+            // จัดการฟอร์มเปลี่ยนรหัสผ่าน
+            document.getElementById('passwordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const statusEl = document.getElementById('password-status');
+                const passwordData = {
+                    current_password: document.getElementById('current-password').value,
+                    new_password: document.getElementById('new-password').value,
+                    confirm_password: document.getElementById('confirm-password').value
+                };
+                fetch('/smartyoga-api/change_password.php', {
+                    method: 'POST', body: JSON.stringify(passwordData),
+                    headers: { 'Content-Type': 'application/json' }, credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    statusEl.style.color = data.message.includes('สำเร็จ') ? 'var(--success-color)' : 'var(--error-color)';
+                    statusEl.textContent = data.message;
+                    if(data.message.includes('สำเร็จ')) {
+                        document.getElementById('passwordForm').reset();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

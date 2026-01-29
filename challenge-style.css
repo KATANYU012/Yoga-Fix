@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+body { font-family: 'Roboto', sans-serif; margin: 0; background-color: #1a1a1a; color: white; overflow: hidden; }
+.challenge-wrapper { display: flex; flex-direction: column; height: 100vh; }
+
+.top-bar { padding: 10px 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+.top-bar h1 { font-size: 1.5rem; color: #c5a878; }
+.top-bar .stage-counter { font-size: 1.2rem; }
+
+.main-content { display: flex; flex: 1; }
+.reference-panel { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #222; }
+.reference-panel h2 { font-size: 2.5rem; margin-bottom: 20px; color: #c5a878; }
+.reference-image { width: 100%; max-width: 400px; height: auto; border: 3px solid #c5a878; border-radius: 8px; }
+
+.trainer-panel { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+.container { position: relative; width: 640px; height: 480px; border: 2px solid #c5a878; }
+#webcam, #output_canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+
+.bottom-bar { padding: 20px; background: #111; display: flex; justify-content: space-between; align-items: center; }
+.feedback-container .status { font-size: 2.5rem; font-weight: bold; }
+.feedback-container .accuracy { font-size: 1.5rem; }
+.skip-btn { padding: 12px 25px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; }
+.skip-btn:hover { background: #5a6268; }
+
+.summary-screen { display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+.summary-box { padding: 40px; background: #222; border-radius: 10px; text-align: center; }
+.summary-box h1 { font-size: 3rem; color: #c5a878; }
+.summary-box p { font-size: 1.8rem; }
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #121212;
+    --bg-medium: #1e1e1e;
+    --bg-light: #2a2a2a;
+    --text-primary: #f0f0f0;
+    --text-secondary: #a0a0a0;
+    --accent: #c5a878;
+    --success: #28a745;
+    --danger: #dc3545;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+.challenge-wrapper { display: flex; flex-direction: column; height: 100vh; }
+
+/* --- Top Bar --- */
+.top-bar {
+    padding: 15px 30px;
+    background: var(--bg-medium);
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.top-bar h1 { font-size: 1.5rem; color: var(--accent); margin: 0; }
+.top-bar .stage-counter { font-size: 1.2rem; color: var(--text-secondary); }
+
+/* --- Main Content --- */
+.main-content { display: flex; flex: 1; }
+
+.reference-panel {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-dark);
+}
+.reference-panel h2 { font-size: 3rem; margin-bottom: 20px; color: var(--accent); text-align: center; }
+.reference-image {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    border: 3px solid var(--accent);
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(197, 168, 120, 0.3);
+}
+
+.trainer-panel {
+    flex: 1.5; /* ให้พื้นที่กล้องใหญ่ขึ้นเล็กน้อย */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: black;
+}
+.container { position: relative; width: 800px; height: 600px; }
+#webcam, #output_canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+
+/* --- Bottom Bar & Feedback --- */
+.bottom-bar {
+    padding: 20px 30px;
+    background: var(--bg-medium);
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.progress-circle {
+    --p:0; /* เปอร์เซ็นต์, จะถูกควบคุมโดย JS */
+    width: 120px;
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+.progress-circle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(var(--success) calc(var(--p) * 1%), var(--bg-light) 0);
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(99% - 10px), #000 calc(100% - 10px));
+    mask: radial-gradient(farthest-side, #0000 calc(99% - 10px), #000 calc(100% - 10px));
+}
+.status-text {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    min-width: 200px;
+}
+.skip-btn {
+    padding: 12px 30px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+.skip-btn:hover { background: #b22222; }
+
+/* --- Summary Screen --- */
+.summary-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    display: none; /* เริ่มต้นด้วยการซ่อน */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+.summary-box { padding: 50px; background: var(--bg-medium); border-radius: 15px; text-align: center; border: 2px solid var(--accent); }
+.summary-box h1 { font-size: 3.5rem; color: var(--accent); }
+.summary-box p { font-size: 2rem; margin: 20px 0 30px 0; }
+.summary-box a { color: var(--accent); font-size: 1.2rem; text-decoration: none; padding: 10px 20px; border: 1px solid var(--accent); border-radius: 5px; }
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Management | SmartYoga AI</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>SmartYoga AI</h2>
+                <span>Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/frontend-admin/dashboard.html">Dashboard</a></l>
+                    <li><a href="/frontend-admin/media.html" class="active">Media Management</a></li>
+                    <li><a href="../frontend-admin/news-management.html">News Management</a></li>
+                    <li><a href="../frontend-user/login/login.html" id="logout-btn">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Media Management</h1>
+                <a href="add-media.html" class="add-new-btn">Upload New Media</a>
+            </header>
+
+            <section class="data-table-container">
+                <h2>Media Library (Yoga Poses)</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Level</th>
+                            <th>File Type</th>
+                            <th>Uploaded At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="media-table-body">
+                        </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mediaTableBody = document.getElementById('media-table-body');
+
+            // ตรวจสอบ Session ก่อน (เหมือนเดิม)
+            fetch('/smartyoga-api/check_session.php', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.isLoggedIn || data.user.role !== 'admin') {
+                        window.location.href = '/frontend-user/login.html';
+                    } else {
+                        loadMedia();
+                    }
+                });
+
+            // ฟังก์ชันสำหรับโหลดข้อมูล Media
+            function loadMedia() {
+                fetch('/smartyoga-api/get_media.php', { credentials: 'include' })
+                    .then(res => res.json())
+                    .then(mediaItems => {
+                        mediaTableBody.innerHTML = '';
+                        mediaItems.forEach(item => {
+                            const row = document.createElement('tr');
+                            // แก้ไข: เพิ่มคอลัมน์ Uploaded At และ Actions ให้ถูกต้อง
+                            row.innerHTML = `
+                                <td>${item.id}</td>
+                                <td>${item.title}</td>
+                                <td>${item.level}</td>
+                                <td>${item.file_type}</td>
+                                <td>${new Date(item.uploaded_at).toLocaleDateString('th-TH')}</td>
+                                <td>
+                                    <button class="action-btn edit-btn" data-id="${item.id}">Edit</button>
+                                    <button class="action-btn delete-btn" data-id="${item.id}">Delete</button>
+                                </td>
+                            `;
+                            mediaTableBody.appendChild(row);
+                        });
+                    });
+            }
+
+            // Event Listener ที่ถูกต้องสำหรับจัดการการคลิกในตาราง
+            mediaTableBody.addEventListener('click', function(e) {
+                const target = e.target;
+                const id = target.getAttribute('data-id');
+
+                if (id) { // ตรวจสอบว่าคลิกที่ปุ่มที่มี data-id จริงๆ
+                    // ถ้าปุ่มที่ถูกคลิกคือ "Delete"
+                    if (target.classList.contains('delete-btn')) {
+                        if (confirm(`คุณแน่ใจหรือไม่ว่าต้องการลบท่า ID: ${id}?`)) {
+                            fetch('/smartyoga-api/delete_media.php', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id: id }),
+                                credentials: 'include'
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                alert(data.message);
+                                loadMedia(); // โหลดข้อมูลในตารางใหม่
+                            });
+                        }
+                    }
+
+                    // ถ้าปุ่มที่ถูกคลิกคือ "Edit"
+                    if (target.classList.contains('edit-btn')) {
+                        window.location.href = `/frontend-admin/media-edit.html?id=${id}`;
+                    }
+                }
+            });
+
+            // จัดการปุ่ม Logout (เหมือนเดิม)
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                fetch('/smartyoga-api/logout.php', { credentials: 'include' })
+                    .then(() => {
+                        alert('ออกจากระบบสำเร็จ');
+                        window.location.href = '/frontend-user/login/login.html';
+                    });
+            });
+        });
+    </script>
+</body>
+</html>
